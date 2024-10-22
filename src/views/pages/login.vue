@@ -6,7 +6,7 @@
                 <div class="login-title">Fish Coins</div>
             </div>
             <el-form :model="param" :rules="rules" ref="login" size="large">
-                <el-tabs v-model="param.loginType" class="demo-tabs" @tab-click="handleClick" :stretch="true">
+                <el-tabs v-model="param.type" class="demo-tabs" @tab-click="handleClick" :stretch="true">
                     <el-tab-pane label="密码登录" name="password">
                         <el-form-item prop="userName">
                             <el-input v-model="param.userName" placeholder="用户名">
@@ -114,7 +114,7 @@ interface LoginInfo {
     passWord: string;
     phone: string;
     code: string;
-    loginType: string;
+    type: string;
 }
 
 const lgStr = localStorage.getItem('login-param');
@@ -127,7 +127,7 @@ const param = reactive<LoginInfo>({
     passWord: defParam ? defParam.passWord : '',
     phone: '',
     code: '',
-    loginType: 'password',
+    type: 'password',
 });
 
 
@@ -153,13 +153,13 @@ const startCountdown = () => {
 const handleClick = (tab: TabsPaneContext, event: Event) => {
     console.log(tab.props, event)
     if(tab.props.name==='password'){
-        param.loginType = 'passWord'
+        param.type = 'password'
         param.phone = ''
         param.code = ''
     }
 
     if(tab.props.name==='code'){
-        param.loginType = 'code'
+        param.type = 'code'
         param.userName = ''
         param.passWord = ''
     }
