@@ -33,6 +33,7 @@ onMounted(() => {
                 window.location.href = '/login';
             }, 2000)
         } else if (stateFromSession === state) {
+            //Todo oauth2 admin + aToken & rToken
             // console.log('State 校验成功');
             // 进行后续处理，比如请求后端获取用户信息
             window.history.replaceState(null, '', window.location.pathname); // 清理 URL 参数
