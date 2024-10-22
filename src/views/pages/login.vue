@@ -6,42 +6,89 @@
                 <div class="login-title">Fish Coins</div>
             </div>
             <el-form :model="param" :rules="rules" ref="login" size="large">
-                <el-form-item prop="username">
-                    <el-input v-model="param.username" placeholder="用户名">
-                        <template #prepend>
-                            <el-icon>
-                                <User />
-                            </el-icon>
-                        </template>
-                    </el-input>
-                </el-form-item>
-                <el-form-item prop="password">
-                    <el-input
-                        type="password"
-                        placeholder="密码"
-                        v-model="param.password"
-                        @keyup.enter="submitForm(login)"
-                        show-password
-                    >
-                        <template #prepend>
-                            <el-icon>
-                                <Lock />
-                            </el-icon>
-                        </template>
-                    </el-input>
-                </el-form-item>
-                <div class="pwd-tips">
-                    <el-checkbox class="pwd-checkbox" v-model="checked" label="记住密码" />
-                    <el-link type="primary" @click="$router.push('/reset-pwd')">忘记密码</el-link>
-                </div>
+                <el-tabs v-model="param.loginType" class="demo-tabs" @tab-click="handleClick" :stretch="true">
+                    <el-tab-pane label="密码登录" name="password">
+                        <el-form-item prop="userName">
+                            <el-input v-model="param.userName" placeholder="用户名">
+                                <template #prepend>
+                                    <el-icon>
+                                        <User />
+                                    </el-icon>
+                                </template>
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item prop="passWord">
+                            <el-input
+                                type="password"
+                                placeholder="密码"
+                                v-model="param.passWord"
+                                @keyup.enter="submitForm(login)"
+                                show-password
+                            >
+                                <template #prepend>
+                                    <el-icon>
+                                        <Lock />
+                                    </el-icon>
+                                </template>
+                            </el-input>
+                        </el-form-item>
+                        <div class="pwd-tips">
+                            <el-checkbox class="pwd-checkbox" v-model="checked" label="记住密码" />
+                            <el-link type="primary" @click="$router.push('/reset-pwd')">忘记密码</el-link>
+                        </div>
+                    </el-tab-pane>
+                    <el-tab-pane label="免密登录" name="code">
+                        <el-form-item prop="phone">
+                            <el-input v-model="param.phone" placeholder="手机号" >
+                                <template #prepend>
+                                    <el-icon>
+                                        <Iphone />
+                                    </el-icon>
+                                </template>
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item prop="code">
+                            <el-input
+                                placeholder="验证码"
+                                v-model="param.code"
+                                @keyup.enter="submitForm(login)"
+                            >
+                                <template #prepend>
+                                    <el-icon>
+                                        <Message />
+                                    </el-icon>
+                                </template>
+                                <template #append>
+                                    <el-button :disabled="isCounting" @click="startCountdown">
+                                        <div v-if="isCounting">
+                                            {{`${countdown}s`}}
+                                        </div>
+                                        <el-icon v-else>
+                                            <Promotion />
+                                        </el-icon>
+                                    </el-button>
+                                </template>
+                            </el-input>
+                        </el-form-item>
+                    </el-tab-pane>
+
+                </el-tabs>
+
                 <el-button class="login-btn" type="primary" size="large" @click="submitForm(login)">登录</el-button>
                 <p class="login-text">
                     没有账号？<el-link type="primary" @click="$router.push('/register')">立即注册</el-link>
-                    <div class="icon-container">
-                        <el-icon :size="25">
-                            <LogoGithub />
-                        </el-icon>
-                    </div>
+                    <span class="icon-container">
+<!--                        <el-tooltip content="Bottom center" placement="bottom" effect="light" hide-after="0">-->
+<!--                            <el-icon :size="25" class="clickable-icon">-->
+<!--                                <PhonePortraitOutline />-->
+<!--                            </el-icon>-->
+<!--                        </el-tooltip>-->
+                        <el-tooltip content="Github" placement="bottom" effect="light" hide-after="0">
+                            <el-icon :size="25" class="clickable-icon" @click="oauth2Login">
+                                <LogoGithub />
+                            </el-icon>
+                        </el-tooltip>
+                    </span>
                 </p>
 
             </el-form>
@@ -58,10 +105,16 @@ import { ElMessage } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
 import {LogoGithub} from '@vicons/ionicons5'
 import {AuthAPI} from "@/api/auth";
+import type { TabsPaneContext } from 'element-plus'
+import {Iphone, Lock, Message, Promotion, Search, User} from "@element-plus/icons-vue";
+import {GlobalEnvConfig} from "@/constants/environments";
 
 interface LoginInfo {
-    username: string;
-    password: string;
+    userName: string;
+    passWord: string;
+    phone: string;
+    code: string;
+    loginType: string;
 }
 
 const lgStr = localStorage.getItem('login-param');
@@ -70,19 +123,71 @@ const checked = ref(lgStr ? true : false);
 
 const router = useRouter();
 const param = reactive<LoginInfo>({
-    username: defParam ? defParam.username : '',
-    password: defParam ? defParam.password : '',
+    userName: defParam ? defParam.userName : '',
+    passWord: defParam ? defParam.passWord : '',
+    phone: '',
+    code: '',
+    loginType: 'password',
 });
 
+
+const countdown = ref(60); // 初始倒计时时间
+const isCounting = ref(false); // 是否正在倒计时
+let timer = null;
+// 开始倒计时逻辑
+const startCountdown = () => {
+    if (isCounting.value) return; // 防止重复点击
+
+    isCounting.value = true;
+    countdown.value = 60;
+
+    timer = setInterval(() => {
+        countdown.value--;
+        if (countdown.value <= 0) {
+            clearInterval(timer); // 停止计时
+            isCounting.value = false; // 恢复按钮可用
+        }
+    }, 1000);
+};
+
+const handleClick = (tab: TabsPaneContext, event: Event) => {
+    console.log(tab.props, event)
+    if(tab.props.name==='password'){
+        param.loginType = 'passWord'
+        param.phone = ''
+        param.code = ''
+    }
+
+    if(tab.props.name==='code'){
+        param.loginType = 'code'
+        param.userName = ''
+        param.passWord = ''
+    }
+}
+
+const oauth2Login = () => {
+    const basicGithubUrl = 'https://github.com/login/oauth/authorize'
+
+    const clientId = GlobalEnvConfig.GITHUB_CLIENT_ID; // 替换为你的 GitHub 应用的 Client ID
+    const redirectUri = encodeURIComponent('http://localhost:5173/auth-redirect?type=github'); // 替换为你的回调地址
+    const state = Math.random().toString(36).substring(7); // 防止CSRF攻击，生成随机状态值
+    sessionStorage.setItem('oauth_state', state);
+    const githubUrl = `${basicGithubUrl}?client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`;
+
+    // 跳转到 GitHub 授权页面
+    window.location.href = githubUrl;
+
+}
+
 const rules: FormRules = {
-    username: [
+    userName: [
         {
             required: true,
             message: '请输入用户名',
             trigger: 'blur',
         },
     ],
-    password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+    passWord: [{ required: true, message: '请输入密码', trigger: 'blur' }],
 };
 const permiss = usePermissStore();
 const login = ref<FormInstance>();
@@ -91,8 +196,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
     // formEl.validate((valid: boolean) => {
     //     if (valid) {
     //         ElMessage.success('登录成功');
-    //         localStorage.setItem('vuems_name', param.username);
-    //         const keys = permiss.defaultList[param.username == 'admin' ? 'admin' : 'user'];
+    //         localStorage.setItem('vuems_name', param.userName);
+    //         const keys = permiss.defaultList[param.userName == 'admin' ? 'admin' : 'user'];
     //         permiss.handleSet(keys);
     //         router.push('/');
     //         if (checked.value) {
@@ -154,7 +259,7 @@ tabs.clearTabs();
     justify-content: space-between;
     align-items: center;
     font-size: 14px;
-    margin: -10px 0 10px;
+    margin: 0 0 10px;
     color: #787878;
 }
 
@@ -185,5 +290,28 @@ tabs.clearTabs();
     margin-left: auto; /* 将图标推到右侧 */
     display: flex;
     align-items: center; /* 垂直居中图标 */
+    gap: 5px;
+}
+
+.icon-container {
+    display: flex;
+    align-items: center; /* 垂直居中图标 */
+}
+
+.clickable-icon {
+    cursor: pointer; /* 显示可点击手势 */
+    transition: color 0.3s ease; /* 添加过渡效果 */
+}
+
+/* 鼠标悬停时改变图标颜色 */
+.clickable-icon:hover {
+    color: #4b9bd9; /* 鼠标悬停时图标变蓝 */
+}
+
+.demo-tabs > .el-tabs__content {
+    padding: 32px;
+    color: #6b778c;
+    font-size: 32px;
+    font-weight: 600;
 }
 </style>

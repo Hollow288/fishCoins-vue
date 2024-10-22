@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
+import {createRouter, createWebHashHistory, createWebHistory, RouteRecordRaw} from 'vue-router';
 import { usePermissStore } from '../store/permiss';
 import Home from '../views/home.vue';
 import NProgress from 'nprogress';
@@ -248,6 +248,14 @@ const routes: RouteRecordRaw[] = [
         component: () => import(/* webpackChunkName: "reset-pwd" */ '../views/pages/reset-pwd.vue'),
     },
     {
+        path: '/auth-redirect', // 用于处理 OAuth2 回调
+        meta: {
+            title: '正在跳转...',
+            noAuth: true,
+        },
+        component: () => import('../views/pages/auth-callback.vue'),
+    },
+    {
         path: '/403',
         meta: {
             title: '没有权限',
@@ -267,7 +275,7 @@ const routes: RouteRecordRaw[] = [
 ];
 
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(),
     routes,
 });
 
@@ -275,7 +283,7 @@ router.beforeEach((to, from, next) => {
     NProgress.start();
     const role = localStorage.getItem('vuems_name');
     const permiss = usePermissStore();
-
+    debugger
     if (!role && to.meta.noAuth !== true) {
         next('/login');
     } else if (typeof to.meta.permiss == 'string' && !permiss.key.includes(to.meta.permiss)) {

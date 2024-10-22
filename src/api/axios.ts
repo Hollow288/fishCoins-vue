@@ -94,6 +94,7 @@ class Request {
               this.isRefreshing = true
               try {
                 const response = (await AuthAPI.refresh(currentRefreshToken)) ?? {}
+                // @ts-ignore
                 const { refresh_token, access_token} = response.data ?? {}
                 if(refresh_token && access_token){
                   AuthUtils.setAccessToken(access_token)
