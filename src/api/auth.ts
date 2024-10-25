@@ -1,6 +1,7 @@
 import {GlobalEnvConfig} from "@/constants/environments";
 import {httpRequest} from "@/api/axios";
-
+import type { BaseResponse} from "@/types/axios"
+import {UserTokenResponse} from "@/types/auth";
 // 登录类型
 enum LoginType {
   USERNAME = 1, // 用户名登录
@@ -16,12 +17,9 @@ export class AuthAPI {
    * 登录
    */
   static login(data) {
-    // const salt = bcrypt.genSaltSync(10)
-    // data.passWord = bcrypt.hashSync(data.passWord,salt)
-    return httpRequest.post<object>(
+    return httpRequest.post<BaseResponse<UserTokenResponse>>(
       `${this.AUTH_API_PREFIX}/login`,
-      { ...data },
-      { params: { type: LoginType.USERNAME } }
+      { ...data }
     )
   }
 
@@ -44,12 +42,12 @@ export class AuthAPI {
       { params: { token } }
     )
   }
-  //
-  // /**
-  //  * GitHub 登录
-  //  */
+
+  /**
+   * GitHub 登录
+   */
   // static loginWithGitHub(code: string) {
-  //   return httpRequest.post<BaseResponse<UserTokenResponse>>(
+  //   return httpRequest.post<object>(
   //     `${this.AUTH_API_PREFIX}/login/github`,
   //     { code }
   //   )

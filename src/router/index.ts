@@ -20,6 +20,7 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     title: '系统首页',
                     noAuth: true,
+                    icon: 'Odometer'
                 },
                 component: () => import(/* webpackChunkName: "dashboard" */ '../views/dashboard.vue'),
             },
@@ -29,6 +30,7 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     title: '用户管理',
                     permiss: '11',
+                    icon: 'Odometer'
                 },
                 component: () => import(/* webpackChunkName: "system-user" */ '../views/system/user.vue'),
             },
@@ -281,17 +283,16 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     NProgress.start();
-    const role = localStorage.getItem('vuems_name');
-    const permiss = usePermissStore();
-    debugger
-    if (!role && to.meta.noAuth !== true) {
-        next('/login');
-    } else if (typeof to.meta.permiss == 'string' && !permiss.key.includes(to.meta.permiss)) {
-        // 如果没有权限，则进入403
-        next('/403');
-    } else {
+    // const role = localStorage.getItem('vuems_name');
+    // const permiss = usePermissStore();
+    // if (!role && to.meta.noAuth !== true) {
+    //     next('/login');
+    // } else if (typeof to.meta.permiss == 'string' && !permiss.key.includes(to.meta.permiss)) {
+    //     // 如果没有权限，则进入403
+    //     next('/403');
+    // } else {
         next();
-    }
+    // }
 });
 
 router.afterEach(() => {

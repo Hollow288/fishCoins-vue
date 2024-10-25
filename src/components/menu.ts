@@ -18,6 +18,7 @@ export const menuData: Menus[] = [
                 pid: '1',
                 index: '/system-user',
                 title: '用户管理',
+                icon: 'Odometer'
             },
             {
                 id: '12',
@@ -104,6 +105,7 @@ export const menuData: Menus[] = [
                         pid: '29',
                         index: '/markdown',
                         title: 'markdown编辑器',
+                        icon: 'Odometer'
                     },
                 ],
             },

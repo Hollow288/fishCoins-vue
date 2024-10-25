@@ -4,6 +4,7 @@ interface ListItem {
 	name: string;
 	path: string;
 	title: string;
+	icon: string
 }
 
 export const useTabsStore = defineStore('tabs', {

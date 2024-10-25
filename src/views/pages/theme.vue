@@ -6,7 +6,7 @@
             </template>
             <div class="theme-list mgb20">
                 <div class="theme-item" @click="setSystemTheme(item)" v-for="item in system"
-                    :style="{ backgroundColor: item.color, color: '#fff' }">{{ item.name }}
+                    :style="{ backgroundColor: item.color, color: '#242f42' }">{{ item.name }}
                 </div>
             </div>
             <div class="flex-center">
@@ -147,7 +147,7 @@ const resetSidebar = () => {
 const system = [
     {
         name: '默认',
-        color: '#242f42'
+        color: '#ffffff'
     },
     {
         name: '健康',

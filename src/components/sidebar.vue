@@ -6,6 +6,7 @@
             :collapse="sidebar.collapse"
             :background-color="sidebar.bgColor"
             :text-color="sidebar.textColor"
+            popper-effect="dark"
             router
         >
             <template v-for="item in menuData">
@@ -24,16 +25,27 @@
                                 :key="subItem.index"
                                 v-permiss="item.id"
                             >
-                                <template #title>{{ subItem.title }}</template>
+                                <template #title>
+                                    <el-icon>
+                                        <component :is="subItem.icon"></component>
+                                    </el-icon>
+                                    {{ subItem.title }}
+                                </template>
                                 <el-menu-item
                                     v-for="(threeItem, i) in subItem.children"
                                     :key="i"
                                     :index="threeItem.index"
                                 >
+                                    <el-icon>
+                                        <component :is="threeItem.icon"></component>
+                                    </el-icon>
                                     {{ threeItem.title }}
                                 </el-menu-item>
                             </el-sub-menu>
                             <el-menu-item v-else :index="subItem.index" v-permiss="item.id">
+                                <el-icon>
+                                    <component :is="subItem.icon"></component>
+                                </el-icon>
                                 {{ subItem.title }}
                             </el-menu-item>
                         </template>
@@ -54,7 +66,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useSidebarStore } from '../store/sidebar';
+import { useSidebarStore } from '@/store/sidebar';
 import { useRoute } from 'vue-router';
 import { menuData } from '@/components/menu';
 

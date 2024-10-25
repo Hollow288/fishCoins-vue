@@ -19,9 +19,9 @@
 <script setup lang="ts">
 import { useSidebarStore } from '@/store/sidebar';
 import { useTabsStore } from '@/store/tabs';
-import vHeader from '@/components/header.vue';
-import vSidebar from '@/components/sidebar.vue';
-import vTabs from '@/components/tabs.vue';
+import VHeader from '@/components/header.vue';
+import VSidebar from '@/components/sidebar.vue';
+import VTabs from '@/components/tabs.vue';
 
 const sidebar = useSidebarStore();
 const tabs = useTabsStore();

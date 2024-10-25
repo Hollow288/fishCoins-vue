@@ -1,17 +1,28 @@
 <template>
     <div class="tabs-container">
-        <el-tabs v-model="activePath" class="tabs" type="card" closable @tab-click="clickTabls" @tab-remove="closeTabs">
+        <el-tabs v-model="activePath"  class="tabs"  closable @tab-click="clickTabls" @tab-remove="closeTabs">
             <el-tab-pane
-                v-for="item in tabs.list"
+                v-for="(item,index) in tabs.list"
                 :key="item.path"
                 :label="item.title"
                 :name="item.path"
                 @click="setTags(item)"
-            ></el-tab-pane>
+            >
+                <template #label>
+                    <span class="custom-tabs-label">
+                       <el-icon >
+                           <component :is="item.icon"></component>
+                       </el-icon>
+                        <el-text class="mx-1" :type="getTextType(index)">{{ item.title }}</el-text>
+<!--                      <span style="font-size: 15px;font-weight: bold">{{ item.title }}</span>-->
+                    </span>
+                </template>
+
+            </el-tab-pane>
         </el-tabs>
         <div class="Tabs-close-box">
             <el-dropdown @command="handleTags">
-                <el-button size="small" type="primary" plain>
+                <el-button size="small" type="info" plain text>
                     标签选项
                     <el-icon class="el-icon--right">
                         <arrow-down />
@@ -31,8 +42,9 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { useTabsStore } from '../store/tabs';
+import { useTabsStore } from '@/store/tabs';
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
+import {ArrowDown} from "@element-plus/icons-vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -48,6 +60,7 @@ const setTags = (route: any) => {
             name: route.name,
             title: route.meta.title,
             path: route.fullPath,
+            icon: route.meta.icon
         });
     }
 };
@@ -87,6 +100,12 @@ const handleTags = (command: string) => {
     }
 };
 
+
+const getTextType = (index: number): "primary" | "success" | "warning" | "danger" | "info" => {
+    const types = ["primary", "success", "info", "warning", "danger"];
+    return types[index % types.length] as "primary" | "success" | "warning" | "danger" | "info";
+};
+
 const clickTabls = (item: any) => {
     router.push(item.props.name);
 };
@@ -110,16 +129,31 @@ watch(
     position: relative;
     overflow: hidden;
     background: #fff;
-    padding: 2px 120px 0 0;
+    padding: 0 90px 0 10px;
+}
+
+.tabs-container::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #dcdcdc;
 }
 
 .tabs {
     .el-tabs__header {
         margin-bottom: 0;
+        border-top: none !important;
     }
 
     .el-tabs__nav {
         height: 28px;
+    }
+
+    .el-tabs__header .el-tabs__item {
+        border-top: none !important;
     }
 
     .el-tabs__nav-next,
@@ -129,20 +163,27 @@ watch(
 
     &.el-tabs {
         --el-tabs-header-height: 28px;
+        border: none;
     }
 }
 
 .Tabs-close-box {
     position: absolute;
-    right: 0;
-    top: 0;
-    box-sizing: border-box;
-    padding-top: 1px;
+    right: 10px;
+    top: 2px;
+    padding-top: 0;
     text-align: center;
-    width: 110px;
-    height: 30px;
+    width: 80px;
     background: #fff;
-    box-shadow: -3px 0 15px 3px rgba(0, 0, 0, 0.1);
     z-index: 10;
+    margin-bottom: 0;
 }
+.custom-tabs-label .el-icon {
+    margin-top: 1px;
+    vertical-align: middle;
+}
+.custom-tabs-label span {
+    vertical-align: middle;
+    margin-left: 4px;
+}{}
 </style>

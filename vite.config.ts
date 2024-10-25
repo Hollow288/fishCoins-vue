@@ -13,7 +13,6 @@ export default defineConfig(({ mode }) => {
 		VITE_BASE_API_PREFIX,
 		VITE_BASE_API_URL
 	} = env
-	console.log('Loaded ENV:', env);
 	const proxy: Record<string, string | ProxyOptions> = {
 			[VITE_BASE_API_PREFIX]: {
 				target: VITE_BASE_API_URL,
@@ -27,7 +26,8 @@ export default defineConfig(({ mode }) => {
 				vue(),
 				VueSetupExtend(),
 				AutoImport({
-					resolvers: [ElementPlusResolver()]
+					resolvers: [ElementPlusResolver()],
+					dirs: ['src/api/**', 'src/store/**', 'src/utils/**']
 				}),
 				Components({
 					resolvers: [ElementPlusResolver()]

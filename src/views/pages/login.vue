@@ -97,10 +97,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
+import {ref, reactive, computed} from 'vue';
 import { useTabsStore } from '@/store/tabs';
 import { usePermissStore } from '@/store/permiss';
-import { useRouter } from 'vue-router';
+import { useUserStore } from '@/store/user';
+import {useRoute, useRouter} from 'vue-router';
 import { ElMessage } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
 import {LogoGithub} from '@vicons/ionicons5'
@@ -108,6 +109,7 @@ import {AuthAPI} from "@/api/auth";
 import type { TabsPaneContext } from 'element-plus'
 import {Iphone, Lock, Message, Promotion, Search, User} from "@element-plus/icons-vue";
 import {GlobalEnvConfig} from "@/constants/environments";
+
 
 interface LoginInfo {
     userName: string;
@@ -117,9 +119,11 @@ interface LoginInfo {
     type: string;
 }
 
+const route = useRoute()
 const lgStr = localStorage.getItem('login-param');
 const defParam = lgStr ? JSON.parse(lgStr) : null;
 const checked = ref(lgStr ? true : false);
+const redirectUrl = computed(() => route.query.redirect as string)
 
 const router = useRouter();
 const param = reactive<LoginInfo>({
@@ -190,28 +194,49 @@ const rules: FormRules = {
     passWord: [{ required: true, message: '请输入密码', trigger: 'blur' }],
 };
 const permiss = usePermissStore();
+const userStore = useUserStore()
 const login = ref<FormInstance>();
 const submitForm = (formEl: FormInstance | undefined) => {
-    // if (!formEl) return;
-    // formEl.validate((valid: boolean) => {
-    //     if (valid) {
-    //         ElMessage.success('登录成功');
-    //         localStorage.setItem('vuems_name', param.userName);
-    //         const keys = permiss.defaultList[param.userName == 'admin' ? 'admin' : 'user'];
-    //         permiss.handleSet(keys);
-    //         router.push('/');
-    //         if (checked.value) {
-    //             localStorage.setItem('login-param', JSON.stringify(param));
-    //         } else {
-    //             localStorage.removeItem('login-param');
-    //         }
-    //     } else {
-    //         ElMessage.error('登录失败');
-    //         return false;
-    //     }
-    // });
 
-    AuthAPI.login(formEl)
+    if (!formEl) return;
+    formEl.validate((valid: boolean) => {
+        if (valid) {
+
+            // localStorage.setItem('vuems_name', param.userName);
+            AuthAPI.login(param).then(res=>{
+                const { code, data, message } = res
+                const { access_token, refresh_token, user } = data ?? {}
+                if(code == '200'){
+                    ElMessage.success(message);
+                    AuthUtils.setAccessToken(access_token)
+                    AuthUtils.setRefreshToken(refresh_token)
+                    userStore.setUser(user)
+
+                    if (checked.value) {
+                        localStorage.setItem('login-param', JSON.stringify(param));
+                    } else {
+                        localStorage.removeItem('login-param');
+                    }
+
+                    if (redirectUrl.value) {
+                        router.replace(redirectUrl.value)
+                    } else {
+                        router.replace('/')
+                    }
+
+                }else{
+                    ElMessage.error(message);
+                }
+            })
+
+        } else {
+            ElMessage.warning('请填写完整信息');
+            return false;
+        }
+    });
+
+
+
 };
 
 const tabs = useTabsStore();

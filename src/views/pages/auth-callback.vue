@@ -2,21 +2,43 @@
 <!--    <div style="background: #e3e3e3;height: calc(100vh) "></div>-->
 </template>
 
-<script setup>
-import {onMounted, ref} from 'vue'
-import { useRouter } from 'vue-router'
+<script setup lang="ts">
+import {onMounted, reactive, ref} from 'vue'
+import {useRoute, useRouter} from 'vue-router'
 
 const router = useRouter()
 import { ElLoading } from 'element-plus'
 import { ElMessage } from 'element-plus'
+import {AuthAPI} from "@/api/auth";
+import {useUserStore} from "@/store/user";
+import {computed} from 'vue';
+
+interface LoginInfo {
+    userName: string;
+    passWord: string;
+    phone: string;
+    code: string;
+    type: string;
+}
+
+const userStore = useUserStore()
+const route = useRoute()
+const redirectUrl = computed(() => route.query.redirect as string)
+
+const param = reactive<LoginInfo>({
+    userName:  '',
+    passWord:  '',
+    phone: '',
+    code: '',
+    type: '',
+});
 
 onMounted(() => {
     const query = new URLSearchParams(window.location.search)
-    const code = query.get('code')  // 获取授权码
+    param.code = query.get('code')  // 获取授权码
     const state = query.get('state')  // 获取 state 参数
-    const type = query.get('type')  // 获取 state 参数
+    param.type = query.get('type')  // 获取 state 参数
     const stateFromSession = sessionStorage.getItem('oauth_state');
-    debugger
 
 
     const openFullScreen2 = () => {
@@ -34,7 +56,27 @@ onMounted(() => {
             }, 2000)
         } else if (stateFromSession === state) {
             //Todo oauth2 admin + aToken & rToken
-            // console.log('State 校验成功');
+
+            AuthAPI.login(param).then(res=>{
+                const { code, data, message } = res
+                const { access_token, refresh_token, user } = data ?? {}
+                if(code == '200'){
+                    loading.close()
+                    ElMessage.success(message);
+                    AuthUtils.setAccessToken(access_token)
+                    AuthUtils.setRefreshToken(refresh_token)
+                    userStore.setUser(user)
+
+                    if (redirectUrl.value) {
+                        router.replace(redirectUrl.value)
+                    } else {
+                        router.replace('/')
+                    }
+
+                }else{
+                    ElMessage.error(message);
+                }
+            })
             // 进行后续处理，比如请求后端获取用户信息
             window.history.replaceState(null, '', window.location.pathname); // 清理 URL 参数
         } else {
