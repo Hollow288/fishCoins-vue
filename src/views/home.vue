@@ -14,6 +14,7 @@
                 </router-view>
             </div>
         </div>
+        <v-footer />
     </div>
 </template>
 <script setup lang="ts">
@@ -22,9 +23,44 @@ import { useTabsStore } from '@/store/tabs';
 import VHeader from '@/components/header.vue';
 import VSidebar from '@/components/sidebar.vue';
 import VTabs from '@/components/tabs.vue';
+import VFooter from '@/components/footer.vue';
+import {useUserStore} from "@/store/user";
+import {onBeforeMount} from "vue";
+import {useRoute, useRouter} from "vue-router";
+import {ElMessage} from "element-plus";
 
 const sidebar = useSidebarStore();
 const tabs = useTabsStore();
+const userStore = useUserStore()
+const route = useRoute();
+const router = useRouter();
+
+// 检查登录状态
+const checkLogin = async () => {
+    // 如果有 token，获取用户信息
+    if (AuthUtils.isAuthenticated()) {
+        if (!userStore.hasData()) {
+            //Todo 重新获取数据
+            // const { data } = (await UserAPI.me()) ?? {}
+            // userStore.setUser(data)
+        }
+        // loading.value = false
+        // sendSystemNotification()
+    } else {
+        // 否则清除用户信息并跳转到登录页
+        ElMessage.error('用户登录信息已过期')
+        userStore.clearUser()
+        router.replace({
+            path: '/login',
+            query: {
+                redirect: route.fullPath
+            }
+        })
+    }
+}
+
+onBeforeMount(() => checkLogin())
+
 </script>
 
 <style>

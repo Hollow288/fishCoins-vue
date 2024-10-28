@@ -4,34 +4,52 @@
             <el-card class="user-profile" shadow="hover" :body-style="{ padding: '0px' }">
                 <div class="user-profile-bg"></div>
                 <div class="user-avatar-wrap">
-                    <el-avatar class="user-avatar" :size="120" :src="avatarImg" />
+                    <el-avatar class="user-avatar" :size="120" :src="user.avatarUrl" />
                 </div>
                 <div class="user-info">
-                    <div class="info-name">{{ name }}</div>
+                    <div class="info-name">{{ user.userName }}</div>
                     <div class="info-desc">
-                        <span>@lin-xin</span>
                         <el-divider direction="vertical" />
-                        <el-link href="https://lin-xin.gitee.io" target="_blank">lin-xin.gitee.io</el-link>
+                        <span>{{ user.email }}</span>
+                        <el-divider direction="vertical" />
+                        <span>{{ user.phoneNumber }}</span>
+                        <el-divider direction="vertical" />
+                        <div>
+                            <div v-if="user.gender == '0'"><el-icon ><Female /></el-icon></div>
+                            <div v-else-if="user.gender == '1'"><el-icon><Male /></el-icon></div>
+                            <div v-else><el-icon><HelpOutline /></el-icon></div>
+                        </div>
+                        <el-divider direction="vertical" />
                     </div>
-                    <div class="info-desc">FE Developer</div>
+                    <div style="margin: 20px 20px">
+                        <el-descriptions  size="small">
+                            <el-descriptions-item >&nbsp;&nbsp;&nbsp;&nbsp;{{ user.biography }}</el-descriptions-item>
+                        </el-descriptions>
+                    </div>
+
+
                     <div class="info-icon">
-                        <a href="https://github.com/lin-xin" target="_blank"> <i class="el-icon-lx-github-fill"></i></a>
-                        <i class="el-icon-lx-qq-fill"></i>
-                        <i class="el-icon-lx-facebook-fill"></i>
-                        <i class="el-icon-lx-twitter-fill"></i>
+                        <a :href="user.githubUrl" target="_blank"> <i class="el-icon-lx-github-fill"></i></a>
+                        <!--Todo 其他的第三方-->
+                        <div v-if="false">
+                            <i class="el-icon-lx-qq-fill"></i>
+                            <i class="el-icon-lx-facebook-fill"></i>
+                            <i class="el-icon-lx-twitter-fill"></i>
+                        </div>
+
                     </div>
                 </div>
-                <div class="user-footer">
-                    <div class="user-footer-item">
-                        <el-statistic title="Follower" :value="1800" />
-                    </div>
-                    <div class="user-footer-item">
-                        <el-statistic title="Following" :value="666" />
-                    </div>
-                    <div class="user-footer-item">
-                        <el-statistic title="Total Post" :value="888" />
-                    </div>
-                </div>
+<!--                <div class="user-footer">-->
+<!--                    <div class="user-footer-item">-->
+<!--                        <el-statistic title="Follower" :value="1800" />-->
+<!--                    </div>-->
+<!--                    <div class="user-footer-item">-->
+<!--                        <el-statistic title="Following" :value="666" />-->
+<!--                    </div>-->
+<!--                    <div class="user-footer-item">-->
+<!--                        <el-statistic title="Total Post" :value="888" />-->
+<!--                    </div>-->
+<!--                </div>-->
             </el-card>
             <el-card
                 class="user-content"
@@ -76,21 +94,6 @@
                             </el-form-item>
                         </el-form>
                     </el-tab-pane>
-                    <el-tab-pane name="label4" label="赞赏作者" class="user-tabpane">
-                        <div class="plugins-tips">
-                            如果该框架
-                            <el-link href="https://github.com/lin-xin/vue-manage-system" target="_blank"
-                                >vue-manage-system</el-link
-                            >
-                            对你有帮助，那就请作者喝杯饮料吧！<el-icon>
-                                <ColdDrink />
-                            </el-icon>
-                            加微信号 linxin_20 探讨问题。
-                        </div>
-                        <div>
-                            <img src="https://lin-xin.gitee.io/images/weixin.jpg" />
-                        </div>
-                    </el-tab-pane>
                 </el-tabs>
             </el-card>
         </div>
@@ -101,10 +104,19 @@
 import { reactive, ref } from 'vue';
 import { VueCropper } from 'vue-cropper';
 import 'vue-cropper/dist/index.css';
-import avatar from '@/assets/img/img.jpg';
+// import avatar from '@/assets/img/img.jpg';
 import TabsComp from '../element/tabs.vue';
+import {useUserStore} from "@/store/user";
+import {Female, Male} from "@element-plus/icons-vue";
+const userStore = useUserStore()
+import {HelpOutline} from '@vicons/ionicons5'
+const user = userStore.getUser()
 
-const name = localStorage.getItem('vuems_name');
+
+// const username: string | null = localStorage.getItem('vuems_name');
+// const username: string | null = userStore.getUser().userName
+const name: string | '../assets/img/img.jpg' = user.userName
+const avatar : string | '@/assets/img/img.jpg' = user.avatarUrl
 const form = reactive({
     new1: '',
     new: '',
@@ -266,5 +278,9 @@ const saveAvatar = () => {
 <style>
 .el-tabs.el-tabs--left {
     height: 100%;
+}
+
+.card-header{
+
 }
 </style>
