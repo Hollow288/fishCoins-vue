@@ -129,7 +129,7 @@ watch(
     position: relative;
     overflow: hidden;
     background: #fff;
-    padding: 0 90px 0 10px;
+    padding: 0 90px 0 5px;
 }
 
 .tabs-container::after {
@@ -165,6 +165,13 @@ watch(
         --el-tabs-header-height: 28px;
         border: none;
     }
+
+    .el-tabs__item{
+        padding: 0 5px;
+        font-size: 15px;
+        font-family: 'PingFang SC', 'Helvetica Neue', Helvetica, 'microsoft yahei', arial, STHeiTi, 'sans-serif';
+    }
+
 }
 
 .Tabs-close-box {

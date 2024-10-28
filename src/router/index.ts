@@ -20,7 +20,7 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     title: '系统首页',
                     noAuth: true,
-                    icon: 'Odometer'
+                    icon: 'Compass'
                 },
                 component: () => import(/* webpackChunkName: "dashboard" */ '../views/dashboard.vue'),
             },

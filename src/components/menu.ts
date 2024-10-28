@@ -5,20 +5,20 @@ export const menuData: Menus[] = [
         id: '0',
         title: '系统首页',
         index: '/dashboard',
-        icon: 'Odometer',
+        icon: 'Compass',
     },
     {
         id: '1',
         title: '系统管理',
         index: '1',
-        icon: 'HomeFilled',
+        icon: 'Setting',
         children: [
             {
                 id: '11',
                 pid: '1',
                 index: '/system-user',
                 title: '用户管理',
-                icon: 'Odometer'
+                icon: 'Compass'
             },
             {
                 id: '12',
