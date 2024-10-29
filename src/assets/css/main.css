@@ -21,6 +21,8 @@ i {
 	background: #fff;
 	border: 1px solid #ddd;
 	border-radius: 5px;
+	height: 100%;
+	box-sizing: border-box;
 }
 
 .el-table th {

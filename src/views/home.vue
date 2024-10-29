@@ -89,31 +89,19 @@ onBeforeMount(() => checkLogin());
 }
 
 .main {
-    overflow-y: scroll;
-    height: calc(100vh - 100px);
+    overflow-y: auto;
+    height: calc(100vh - 128px);
+    scrollbar-width: none;
+    background-color: #ffffff;
 }
 
 
 /* 设置滚动条的宽度和颜色 */
 .main::-webkit-scrollbar {
-    width: 8px; /* 宽度 */
+    //width: 8px; /* 宽度 */
+    display: none;
 }
 
-/* 滚动条轨道 */
-.main::-webkit-scrollbar-track {
-    background-color: #f1f1f1; /* 轨道背景色 */
-}
-
-/* 滚动条滑块 */
-.main::-webkit-scrollbar-thumb {
-    background-color: rgba(85, 85, 85, 0.4); /* 滑块颜色 */
-    border-radius: 6px; /* 滑块圆角 */
-}
-
-/* 滚动条滑块悬停样式 */
-.main::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(85, 85, 85, 0.3); /* 悬停时滑块颜色 */
-}
 
 
 

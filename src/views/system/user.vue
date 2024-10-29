@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <TableSearch :query="query" :options="searchOpt" :search="handleSearch" />
+    <div style="height: 100%">
+<!--        <TableSearch :query="query" :options="searchOpt" :search="handleSearch" />-->
         <div class="container">
             <TableCustom :columns="columns" :tableData="tableData" :total="page.total" :viewFunc="handleView"
                 :delFunc="handleDelete" :page-change="changePage" :editFunc="handleEdit">
