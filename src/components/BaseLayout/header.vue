@@ -2,7 +2,7 @@
     <div class="header">
         <!-- 折叠按钮 -->
         <div class="header-left">
-            <img class="logo" src="../assets/img/logo.svg" alt="" />
+            <img class="logo" src="../../assets/img/logo.svg" alt="" />
             <div class="web-title">Fish Coins</div>
             <div class="collapse-btn" @click="collapseChage">
                 <el-icon v-if="sidebar.collapse">
@@ -58,7 +58,7 @@
 </template>
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import { useSidebarStore } from '../store/sidebar';
+import { useSidebarStore } from '../../store/sidebar';
 import { useRouter } from 'vue-router';
 // import imgurl from '../assets/img/img.jpg';
 import {useUserStore} from "@/store/user";

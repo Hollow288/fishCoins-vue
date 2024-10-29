@@ -1,6 +1,6 @@
 import {createRouter, createWebHashHistory, createWebHistory, RouteRecordRaw} from 'vue-router';
 import { usePermissStore } from '../store/permiss';
-import Home from '../views/home.vue';
+import Home from '../components/home.vue';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 
@@ -25,32 +25,32 @@ const routes: RouteRecordRaw[] = [
                 component: () => import(/* webpackChunkName: "dashboard" */ '../views/dashboard.vue'),
             },
             {
-                path: '/system-user',
-                name: 'system-user',
+                path: '/system-pages-user',
+                name: 'system-pages-user',
                 meta: {
                     title: '用户管理',
                     permiss: '11',
                     icon: 'Odometer'
                 },
-                component: () => import(/* webpackChunkName: "system-user" */ '../views/system/user.vue'),
+                component: () => import(/* webpackChunkName: "system-pages-user" */ '@/views/system-pages/user.vue'),
             },
             {
-                path: '/system-role',
-                name: 'system-role',
+                path: '/system-pages-role',
+                name: 'system-pages-role',
                 meta: {
                     title: '角色管理',
                     permiss: '12',
                 },
-                component: () => import(/* webpackChunkName: "system-role" */ '../views/system/role.vue'),
+                component: () => import(/* webpackChunkName: "system-pages-role" */ '@/views/system-pages/role.vue'),
             },
             {
-                path: '/system-menu',
-                name: 'system-menu',
+                path: '/system-pages-menu',
+                name: 'system-pages-menu',
                 meta: {
                     title: '菜单管理',
                     permiss: '13',
                 },
-                component: () => import(/* webpackChunkName: "system-menu" */ '../views/system/menu.vue'),
+                component: () => import(/* webpackChunkName: "system-pages-menu" */ '@/views/system-pages/menu.vue'),
             },
             {
                 path: '/table',
@@ -104,7 +104,7 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     title: '个人中心',
                 },
-                component: () => import(/* webpackChunkName: "ucenter" */ '../views/pages/ucenter.vue'),
+                component: () => import(/* webpackChunkName: "ucenter" */ '../views/theme-pages/ucenter.vue'),
             },
             {
                 path: '/editor',
@@ -149,7 +149,7 @@ const routes: RouteRecordRaw[] = [
                     title: '主题设置',
                     permiss: '7',
                 },
-                component: () => import(/* webpackChunkName: "theme" */ '../views/pages/theme.vue'),
+                component: () => import(/* webpackChunkName: "theme" */ '../views/theme-pages/theme.vue'),
             },
             {
                 path: '/calendar',
@@ -231,7 +231,7 @@ const routes: RouteRecordRaw[] = [
             title: '登录',
             noAuth: true,
         },
-        component: () => import(/* webpackChunkName: "login" */ '../views/pages/login.vue'),
+        component: () => import(/* webpackChunkName: "login" */ '../views/auth-pages/login.vue'),
     },
     {
         path: '/register',
@@ -239,7 +239,7 @@ const routes: RouteRecordRaw[] = [
             title: '注册',
             noAuth: true,
         },
-        component: () => import(/* webpackChunkName: "register" */ '../views/pages/register.vue'),
+        component: () => import(/* webpackChunkName: "register" */ '../views/auth-pages/register.vue'),
     },
     {
         path: '/reset-pwd',
@@ -247,7 +247,7 @@ const routes: RouteRecordRaw[] = [
             title: '重置密码',
             noAuth: true,
         },
-        component: () => import(/* webpackChunkName: "reset-pwd" */ '../views/pages/reset-pwd.vue'),
+        component: () => import(/* webpackChunkName: "reset-pwd" */ '../views/auth-pages/reset-pwd.vue'),
     },
     {
         path: '/auth-redirect', // 用于处理 OAuth2 回调
@@ -255,7 +255,7 @@ const routes: RouteRecordRaw[] = [
             title: '正在跳转...',
             noAuth: true,
         },
-        component: () => import('../views/pages/auth-callback.vue'),
+        component: () => import('../views/auth-pages/auth-callback.vue'),
     },
     {
         path: '/403',
@@ -263,7 +263,7 @@ const routes: RouteRecordRaw[] = [
             title: '没有权限',
             noAuth: true,
         },
-        component: () => import(/* webpackChunkName: "403" */ '../views/pages/403.vue'),
+        component: () => import(/* webpackChunkName: "403" */ '../views/error-pages/403.vue'),
     },
     {
         path: '/404',
@@ -271,7 +271,7 @@ const routes: RouteRecordRaw[] = [
             title: '找不到页面',
             noAuth: true,
         },
-        component: () => import(/* webpackChunkName: "404" */ '../views/pages/404.vue'),
+        component: () => import(/* webpackChunkName: "404" */ '../views/error-pages/404.vue'),
     },
     { path: '/:path(.*)', redirect: '/404' },
 ];

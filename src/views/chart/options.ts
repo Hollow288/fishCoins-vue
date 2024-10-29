@@ -142,7 +142,7 @@ export const wordOptions = {
                     value: 7000,
                 },
                 {
-                    name: 'vue-manage-system',
+                    name: 'vue-manage-system-pages',
                     value: 2000,
                 },
                 {

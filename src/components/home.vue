@@ -23,10 +23,10 @@
 <script setup lang="ts">
 import { useSidebarStore } from '@/store/sidebar';
 import { useTabsStore } from '@/store/tabs';
-import VHeader from '@/components/header.vue';
-import VSidebar from '@/components/sidebar.vue';
-import VTabs from '@/components/tabs.vue';
-import VFooter from '@/components/footer.vue';
+import VHeader from '@/components/BaseLayout/header.vue';
+import VSidebar from '@/components/BaseLayout/sidebar.vue';
+import VTabs from '@/components/BaseLayout/tabs.vue';
+import VFooter from '@/components/BaseLayout/footer.vue';
 import { useUserStore } from "@/store/user";
 import { onBeforeMount } from "vue";
 import { useRoute, useRouter } from "vue-router";

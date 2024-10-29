@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { ElTree } from 'element-plus';
-import { menuData } from '@/components/menu';
+import { menuData } from '@/components/BaseLayout/menu';
 
 const props = defineProps({
     permissOptions: {

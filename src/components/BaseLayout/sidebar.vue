@@ -70,7 +70,7 @@
 import { computed } from 'vue';
 import { useSidebarStore } from '@/store/sidebar';
 import { useRoute } from 'vue-router';
-import { menuData } from '@/components/menu';
+import { menuData } from '@/components/BaseLayout/menu';
 
 const route = useRoute();
 const onRoutes = computed(() => {

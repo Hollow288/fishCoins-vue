@@ -16,22 +16,37 @@ export const menuData: Menus[] = [
             {
                 id: '11',
                 pid: '1',
-                index: '/system-user',
+                index: '/system-pages-user',
                 title: '用户管理',
                 icon: 'Compass'
             },
             {
                 id: '12',
                 pid: '1',
-                index: '/system-role',
+                index: '/system-pages-role',
                 title: '角色管理',
             },
             {
                 id: '13',
                 pid: '1',
-                index: '/system-menu',
+                index: '/system-pages-menu',
                 title: '菜单管理',
             },
+        ],
+    },
+    {
+        id: '8',
+        title: '幻塔相关',
+        index: '8',
+        icon: 'MostlyCloudy',
+        children: [
+            {
+                id: '11',
+                pid: '8',
+                index: '/system-pages-user',
+                title: '用户管理',
+                icon: 'Compass'
+            }
         ],
     },
     {

@@ -43,7 +43,7 @@ import { Menus } from '@/types/menu';
 import TableCustom from '@/components/table-custom.vue';
 import TableDetail from '@/components/table-detail.vue';
 import { FormOption } from '@/types/form-option';
-import { menuData } from '@/components/menu';
+import { menuData } from '@/components/BaseLayout/menu';
 
 // 表格相关
 let columns = ref([

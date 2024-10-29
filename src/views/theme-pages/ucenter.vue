@@ -165,7 +165,7 @@ const saveAvatar = () => {
 .user-profile-bg {
     width: 100%;
     height: 200px;
-    background-image: url('../../assets/img/ucenter-bg.jpg');
+    background-image: url('@/assets/img/ucenter-bg.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
