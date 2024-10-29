@@ -11,7 +11,7 @@
         >
             <template v-for="item in menuData">
                 <template v-if="item.children">
-                    <el-sub-menu :index="item.index" :key="item.index" v-permiss="item.id">
+                    <el-sub-menu :index="item.index" :key="item.index" v-permiss="item.id" :background-color="sidebar.bgColor">
                         <template #title>
                             <el-icon>
                                 <component :is="item.icon"></component>
@@ -23,6 +23,7 @@
                                 v-if="subItem.children"
                                 :index="subItem.index"
                                 :key="subItem.index"
+                                :background-color="sidebar.bgColor"
                                 v-permiss="item.id"
                             >
                                 <template #title>
@@ -35,6 +36,7 @@
                                     v-for="(threeItem, i) in subItem.children"
                                     :key="i"
                                     :index="threeItem.index"
+                                    :background-color="sidebar.bgColor"
                                 >
                                     <el-icon>
                                         <component :is="threeItem.icon"></component>
@@ -42,7 +44,7 @@
                                     {{ threeItem.title }}
                                 </el-menu-item>
                             </el-sub-menu>
-                            <el-menu-item v-else :index="subItem.index" v-permiss="item.id">
+                            <el-menu-item v-else :index="subItem.index" v-permiss="item.id" :background-color="sidebar.bgColor">
                                 <el-icon>
                                     <component :is="subItem.icon"></component>
                                 </el-icon>
@@ -81,11 +83,10 @@ const sidebar = useSidebarStore();
 <style scoped>
 .sidebar {
     display: block;
-    position: absolute;
-    left: 0;
-    top: 70px;
-    bottom: 0;
-    overflow-y: scroll;
+    overflow-y: auto;
+    height: 100%;
+    overflow-x: hidden
+
 }
 
 .sidebar::-webkit-scrollbar {
@@ -93,7 +94,8 @@ const sidebar = useSidebarStore();
 }
 
 .sidebar-el-menu:not(.el-menu--collapse) {
-    width: 250px;
+    width: 220px;
+    height: 100%;
 }
 
 .sidebar-el-menu {
