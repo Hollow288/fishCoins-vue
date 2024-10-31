@@ -36,15 +36,15 @@ export const menuData: Menus[] = [
     },
     {
         id: '8',
-        title: '幻塔相关',
+        title: 'Hotta',
         index: '8',
         icon: 'MostlyCloudy',
         children: [
             {
-                id: '11',
+                id: '81',
                 pid: '8',
-                index: '/system-pages-user',
-                title: '用户管理',
+                index: '/illustrated-weapons',
+                title: '武器图鉴',
                 icon: 'Compass'
             }
         ],

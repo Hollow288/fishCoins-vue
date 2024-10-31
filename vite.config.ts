@@ -42,11 +42,16 @@ export default defineConfig(({ mode }) => {
 					'~': '/src/assets'
 				}
 			},
-			server:{proxy},
+			server:{proxy,sourcemap: true},
 			preview: {proxy},
 			define: {
 				__VUE_PROD_HYDRATION_MISMATCH_DETAILS__: "true",
 			},
+			build:{
+				minify: false,
+				// 为调试构建生成源代码映射 (sourcemap)
+				sourcemap: true
+			}
 		}
 	})
 

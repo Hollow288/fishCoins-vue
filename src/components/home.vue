@@ -6,13 +6,20 @@
             <div class="content" :class="{ 'collapse-content': sidebar.collapse }">
                 <v-tabs></v-tabs>
                 <div class="main">
-                    <router-view v-slot="{ Component }">
-                        <transition name="move" mode="out-in">
-                            <keep-alive :include="tabs.nameList">
-                                <component :is="Component"></component>
-                            </keep-alive>
-                        </transition>
-                    </router-view>
+
+                        <router-view v-slot="{ Component }">
+                            <transition name="move" mode="out-in">
+                                <keep-alive :include="tabs.nameList">
+
+                                        <el-card style="height: 100%;" :body-style="bodyStyle">
+                                            <component :is="Component">
+                                            </component>
+                                        </el-card>
+
+                                </keep-alive>
+                            </transition>
+                        </router-view>
+
                 </div>
             </div>
         </div>
@@ -28,7 +35,7 @@ import VSidebar from '@/components/BaseLayout/sidebar.vue';
 import VTabs from '@/components/BaseLayout/tabs.vue';
 import VFooter from '@/components/BaseLayout/footer.vue';
 import { useUserStore } from "@/store/user";
-import { onBeforeMount } from "vue";
+import {CSSProperties, onBeforeMount} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 
@@ -37,6 +44,15 @@ const tabs = useTabsStore();
 const userStore = useUserStore();
 const route = useRoute();
 const router = useRouter();
+
+
+const bodyStyle: CSSProperties = {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    boxSizing: 'border-box'
+}as CSSProperties
+
 
 const checkLogin = async () => {
     if (AuthUtils.isAuthenticated()) {
@@ -89,10 +105,11 @@ onBeforeMount(() => checkLogin());
 }
 
 .main {
-    overflow-y: auto;
-    height: calc(100vh - 128px);
+    //overflow-y: auto;
+    height: calc(100vh - 140px);
     scrollbar-width: none;
     background-color: #ffffff;
+    padding: 5px;
 }
 
 

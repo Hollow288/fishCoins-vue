@@ -22,7 +22,7 @@ const routes: RouteRecordRaw[] = [
                     noAuth: true,
                     icon: 'Compass'
                 },
-                component: () => import(/* webpackChunkName: "dashboard" */ '../views/dashboard.vue'),
+                component: () => import(/* webpackChunkName: "dashboard" */ '../components/dashboard.vue'),
             },
             {
                 path: '/system-pages-user',
@@ -30,7 +30,7 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     title: '用户管理',
                     permiss: '11',
-                    icon: 'Odometer'
+                    icon: 'Compass'
                 },
                 component: () => import(/* webpackChunkName: "system-pages-user" */ '@/views/system-pages/user.vue'),
             },
@@ -223,6 +223,15 @@ const routes: RouteRecordRaw[] = [
                 },
                 component: () => import(/* webpackChunkName: "statistic" */ '../views/element/statistic.vue'),
             },
+            {
+                path: '/illustrated-weapons',
+                name: 'illustrated-weapons',
+                meta: {
+                    title: '武器图鉴',
+                    permiss: '29',
+                },
+                component: () => import(/* webpackChunkName: "statistic" */ '../views/hotta/illustrated-weapons/index.vue'),
+            }
         ],
     },
     {
