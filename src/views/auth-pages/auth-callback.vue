@@ -5,13 +5,15 @@
 <script setup lang="ts">
 import {onMounted, reactive, ref} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
-
-const router = useRouter()
 import { ElLoading } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import {AuthAPI} from "@/api/auth";
 import {useUserStore} from "@/store/user";
 import {computed} from 'vue';
+
+
+
+const router = useRouter()
 
 interface LoginInfo {
     userName: string;

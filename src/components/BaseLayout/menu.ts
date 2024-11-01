@@ -43,7 +43,7 @@ export const menuData: Menus[] = [
             {
                 id: '81',
                 pid: '8',
-                index: '/illustrated-weapons',
+                index: '/IllustratedWeapons',
                 title: '武器图鉴',
                 icon: 'Compass'
             }

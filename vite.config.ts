@@ -5,6 +5,7 @@ import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import type { ProxyOptions } from 'vite'
+import {fileURLToPath, URL} from "node:url";
 
 export default defineConfig(({ mode }) => {
 
@@ -38,9 +39,10 @@ export default defineConfig(({ mode }) => {
 			},
 			resolve: {
 				alias: {
-					'@': '/src',
+					'@': fileURLToPath(new URL('./src', import.meta.url)),
 					'~': '/src/assets'
-				}
+				},
+				extensions: ['.js', '.ts', '.vue']
 			},
 			server:{proxy,sourcemap: true},
 			preview: {proxy},

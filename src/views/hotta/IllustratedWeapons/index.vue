@@ -3,7 +3,7 @@
         <el-button text bg :icon="Plus" @click="add">
             新增
         </el-button>
-        <el-select v-model="value" multiple placeholder="Select" style="width: 240px;margin-left: 10px; margin-right: auto;" @change="filterWeaponAttributes">
+        <el-select v-model="value" multiple placeholder="属性筛选" style="width: 180px;margin-left: 10px; margin-right: auto;" @change="filterWeaponAttributes">
             <el-option
                     v-for="item in weaponAttributes"
                     :key="item.value"
@@ -58,11 +58,35 @@
     </div>
 
 
+
+
+    <el-dialog v-model="dialogFormVisible" title="Shipping address" width="800" draggable >
+        <WeaponsFormModal :form-data="rowData" :edit="isEdit" ref="weaponsFormModalRef" @save="queryList"/>
+        <template #footer>
+            <div class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">Cancel</el-button>
+                <el-button type="primary" @click="saveFormData">
+                    Confirm
+                </el-button>
+            </div>
+        </template>
+    </el-dialog>
+
+
+
 </template>
 
 <script lang="ts" setup>
 import {Delete, Edit, Plus, RefreshRight} from "@element-plus/icons-vue";
-import {ref} from "vue";
+import {WeaponsFormModal} from './components'
+import {reactive, ref} from "vue";
+import type { UploadProps } from 'element-plus'
+
+
+const dialogFormVisible = ref(false)
+
+const weaponsFormModalRef = ref()
+
 const handleClick = () => {
     console.log('click')
 }
@@ -70,10 +94,11 @@ const handleClick = () => {
 const value = ref<string[]>([])
 const selectable = (row) => ![1, 2].includes(row.id)
 
-
 const findImgSrcByValue = (value: string) : string =>{
     return weaponAttributes.find(n=>n.value == value).src
 }
+
+
 
 
 const weaponAttributes = [
@@ -206,6 +231,26 @@ const filterWeaponAttributes = (value: any): void =>{
 
 const add = ()=>{
     debugger
+    weaponsFormModalRef.value
+    dialogFormVisible.value = true
     console.log("111")
 }
+
+const queryList = ()=>{
+    console.log("然后触发了父表单的刷新")
+}
+
+const saveFormData=()=>{
+    weaponsFormModalRef.value.save()
+    dialogFormVisible.value = false
+}
+
+
+
+
+
+
+
 </script>
+
+

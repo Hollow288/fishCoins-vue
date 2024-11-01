@@ -108,8 +108,8 @@ import 'vue-cropper/dist/index.css';
 import TabsComp from '../element/tabs.vue';
 import {useUserStore} from "@/store/user";
 import {Female, Male} from "@element-plus/icons-vue";
-const userStore = useUserStore()
 import {HelpOutline} from '@vicons/ionicons5'
+const userStore = useUserStore()
 const user = userStore.getUser()
 
 

@@ -3,6 +3,7 @@ export {}
 declare global {
   const AuthAPI: typeof import('./src/api/auth')['AuthAPI']
   const AuthUtils: typeof import('./src/utils/auth')['AuthUtils']
+  const ElMessage: typeof import('element-plus/es')['ElMessage']
   const china: typeof import('./src/utils/china')['default']
   const fetchData: typeof import('./src/api/index')['fetchData']
   const fetchRoleData: typeof import('./src/api/index')['fetchRoleData']
