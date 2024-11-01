@@ -3,7 +3,7 @@
         <el-button text bg :icon="Plus" @click="add">
             新增
         </el-button>
-        <el-select v-model="value" multiple placeholder="属性筛选" style="width: 180px;margin-left: 10px; margin-right: auto;" @change="filterWeaponAttributes">
+        <el-select v-model="value" multiple placeholder="属性筛选" style="width: 300px;margin-left: 10px; margin-right: auto;" @change="filterWeaponAttributes">
             <el-option
                     v-for="item in weaponAttributes"
                     :key="item.value"
@@ -105,27 +105,47 @@ const weaponAttributes = [
     {
         label: '物理',
         value: '物理',
-        src: new URL('@/assets/hotta/attributeIcon/Phy.png', import.meta.url).href
+        src: new URL('@/assets/hotta/weapons-attribute-icon/Phy.png', import.meta.url).href
     },
     {
         label: '火焰',
         value: '火焰',
-        src: new URL('@/assets/hotta/attributeIcon/fire.png', import.meta.url).href
+        src: new URL('@/assets/hotta/weapons-attribute-icon/fire.png', import.meta.url).href
     },
     {
         label: '寒冰',
         value: '寒冰',
-        src: new URL('@/assets/hotta/attributeIcon/ice.png', import.meta.url).href
+        src: new URL('@/assets/hotta/weapons-attribute-icon/ice.png', import.meta.url).href
     },
     {
         label: '雷电',
         value: '雷电',
-        src: new URL('@/assets/hotta/attributeIcon/elec.png', import.meta.url).href
+        src: new URL('@/assets/hotta/weapons-attribute-icon/elec.png', import.meta.url).href
     },
     {
         label: '异能',
         value: '异能',
-        src: new URL('@/assets/hotta/attributeIcon/Extr.png', import.meta.url).href
+        src: new URL('@/assets/hotta/weapons-attribute-icon/Extr.png', import.meta.url).href
+    },
+    {
+        label: '物火',
+        value: '物火',
+        src: new URL('@/assets/hotta/weapons-attribute-icon/phy-fire.png', import.meta.url).href
+    },
+    {
+        label: '火物',
+        value: '火物',
+        src: new URL('@/assets/hotta/weapons-attribute-icon/fire-phy.png', import.meta.url).href
+    },
+    {
+        label: '冰雷',
+        value: '冰雷',
+        src: new URL('@/assets/hotta/weapons-attribute-icon/ice-elec.png', import.meta.url).href
+    },
+    {
+        label: '雷冰',
+        value: '雷冰',
+        src: new URL('@/assets/hotta/weapons-attribute-icon/elec-ice.png', import.meta.url).href
     }
 ]
 
