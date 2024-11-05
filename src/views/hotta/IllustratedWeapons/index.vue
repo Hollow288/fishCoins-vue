@@ -21,7 +21,7 @@
         </el-select>
 
         <div style="display: flex; gap: 5px;">
-            <el-button text bg :icon="Edit">
+            <el-button text bg :icon="Edit" @click="edit">
                 修改
             </el-button>
             <el-button text bg :icon="Delete">
@@ -31,7 +31,7 @@
         </div>
     </div>
 
-    <el-table :data="tableData" style="width: 100%; height: 100%;" size="large">
+    <el-table ref="formRef" :data="tableData" style="width: 100%; height: 100%;" size="large">
         <el-table-column type="selection" :selectable="selectable" width="55"/>
         <el-table-column fixed prop="date" label="Date" width="150"/>
         <el-table-column prop="name" label="Name" width="120"/>
@@ -74,14 +74,18 @@
 <script lang="ts" setup>
 import {Delete, Edit, Plus, RefreshRight} from "@element-plus/icons-vue";
 import {WeaponsFormModal} from './components'
-import {reactive, ref} from "vue";
-import type { UploadProps } from 'element-plus'
+import {ref} from "vue";
 import {weaponAttributes} from '@/types/hotta/arms/basic-info'
+import {ElMessage} from "element-plus";
 
 
 const dialogFormVisible = ref(false)
 
 const weaponsFormModalRef = ref()
+const formRef = ref()
+
+const rowDataId = ref(null)
+const isEdit = ref('')
 
 const handleClick = () => {
     console.log('click')
@@ -195,11 +199,18 @@ const filterWeaponAttributes = (value: any): void =>{
 }
 
 
-const add = ()=>{
-    debugger
+const add = () => {
     weaponsFormModalRef.value
+    isEdit.value = 'add'
+    rowDataId.value = null
     dialogFormVisible.value = true
-    console.log("111")
+}
+
+const edit = () => {
+    const editList = formRef.value.getSelectionRows()
+    if(editList.length == 0 || editList.length > 1){
+        ElMessage.warning('仅能选择一条数据修改！');
+    }
 }
 
 const queryList = ()=>{
@@ -210,11 +221,6 @@ const queryList = ()=>{
 const saveFormData=()=>{
     weaponsFormModalRef.value.save()
 }
-
-
-
-
-
 
 
 </script>

@@ -20,7 +20,7 @@ const {formDataId, isEdit} = defineProps({
         type: String,
     },
     isEdit: {
-        type: Boolean,
+        type: String,
         required: false
     }
 });
