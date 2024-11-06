@@ -16,7 +16,7 @@
                 </div>
             </el-option>
             <template #tag>
-                <img v-for="item in value" :src="findImgSrcByValue(item)" :alt="findImgSrcByValue(item)"  style="width: 18px; height: 18px;margin-right: 5px">
+                <img v-for="item in value" :src="findAttributeImgSrcByValue(item)" :alt="findAttributeImgSrcByValue(item)"  style="width: 18px; height: 18px;margin-right: 5px">
             </template>
         </el-select>
 
@@ -27,19 +27,33 @@
             <el-button text bg :icon="Delete">
                 删除
             </el-button>
-            <el-button :icon="RefreshRight" circle/>
+            <el-button :icon="RefreshRight" circle @click="queryList"/>
         </div>
     </div>
 
-    <el-table ref="formRef" :data="tableData" style="width: 100%; height: 100%;" size="large">
-        <el-table-column type="selection" :selectable="selectable" width="55"/>
-        <el-table-column fixed prop="date" label="Date" width="150"/>
-        <el-table-column prop="name" label="Name" width="120"/>
-        <el-table-column prop="state" label="State" width="120"/>
-        <el-table-column prop="city" label="City" width="120"/>
-        <el-table-column prop="address" label="Address" width="600"/>
-        <el-table-column prop="zip" label="Zip" width="120"/>
-        <el-table-column fixed="right" label="Operations" min-width="120">
+    <el-table ref="formRef" :data="tableData" style="width: 100%; height: 100%;" size="large" >
+        <el-table-column type="selection"  width="55"/>
+        <el-table-column fixed prop="armsName" label="武器名称" width="150"/>
+        <el-table-column prop="armsId" label="武器ID" width="120"/>
+        <el-table-column prop="armsAttribute" label="武器属性" width="120">
+            <template #default="scope">
+                <div style="display: flex; align-items: center;">
+                    <img  :src="findAttributeImgSrcByValue(scope.row.armsAttribute)" :alt="findAttributeImgSrcByValue(scope.row.armsAttribute)"  style="width: 18px; height: 18px;margin-right: 5px">
+                    <span>{{ scope.row.armsAttribute }} </span>
+                </div>
+            </template>
+        </el-table-column>
+        <el-table-column prop="armsType" label="武器定位" width="120">
+            <template #default="scope">
+                <div style="display: flex; align-items: center;">
+                    <img  :src="findTypeImgSrcByValue(scope.row.armsType)" :alt="findTypeImgSrcByValue(scope.row.armsType)"  style="width: 18px; height: 18px;margin-right: 5px">
+                    <span>{{ scope.row.armsType }} </span>
+                </div>
+            </template>
+        </el-table-column>
+        <el-table-column prop="armsThumbnailUrl" label="武器缩略图" width="120"/>
+        <el-table-column prop="armsDescription" label="武器描述" min-width="300"/>
+        <el-table-column fixed="right" label="操作" width="120" header-align="center">
             <template #default>
                 <el-button link type="primary" size="small" @click="handleClick">
                     Detail
@@ -51,14 +65,15 @@
 
     <div style="display: flex; justify-content: flex-end; padding: 20px 0 0;">
         <el-pagination
+                :page-size="10"
                 background
                 layout="prev, pager, next"
                 :total="1000"
         />
     </div>
 
-    <el-dialog v-model="dialogFormVisible" title="Shipping address" width="1200"  draggable  align-center destroy-on-close>
-        <WeaponsFormModal :form-data-id="rowDataId" :edit="isEdit" ref="weaponsFormModalRef" @save="queryList"/>
+    <el-dialog v-model="dialogFormVisible" title="Arms Info" width="1200"  draggable  align-center destroy-on-close>
+        <WeaponsFormModal :form-data-id="rowDataId" :is-edit="isEdit" ref="weaponsFormModalRef" @save="queryList"/>
         <template #footer>
             <div class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">Cancel</el-button>
@@ -74,10 +89,11 @@
 <script lang="ts" setup>
 import {Delete, Edit, Plus, RefreshRight} from "@element-plus/icons-vue";
 import {WeaponsFormModal} from './components'
-import {ref} from "vue";
-import {weaponAttributes} from '@/types/hotta/arms/basic-info'
+import {onMounted, reactive, ref} from "vue";
+import {ArmsPage, weaponAttributes, weaponType} from '@/types/hotta/arms/basic-info'
 import {ElMessage} from "element-plus";
-
+import {ArmsAPI} from "@/api/hotta/arms";
+import type {ItemsBasic,ArmsInfo } from '@/types/hotta/arms/basic-info'
 
 const dialogFormVisible = ref(false)
 
@@ -86,116 +102,30 @@ const formRef = ref()
 
 const rowDataId = ref(null)
 const isEdit = ref('')
+const value = ref<string[]>([])
+let tableData = reactive<ArmsInfo[]>([])
+const armsQueryParams = ref<ArmsPage>({page:1,pageSize:10,attributeType:''})
 
 const handleClick = () => {
     console.log('click')
 }
 
-const value = ref<string[]>([])
-const selectable = (row) => ![1, 2].includes(row.id)
 
-const findImgSrcByValue = (value: string) : string =>{
+
+const findAttributeImgSrcByValue = (value: string) : string =>{
     return weaponAttributes.find(n=>n.value == value).src
 }
 
+const findTypeImgSrcByValue = (value: string) : string =>{
+    return weaponType.find(n=>n.value == value).src
+}
 
 
-const tableData = [
-    {
-        date: '2016-05-03',
-        name: 'Tom',
-        state: 'California',
-        city: 'Los Angeles',
-        address: 'No. 189, Grove St, Los Angeles',
-        zip: 'CA 90036',
-        tag: 'Home',
-    },
-    {
-        date: '2016-05-02',
-        name: 'Tom',
-        state: 'California',
-        city: 'Los Angeles',
-        address: 'No. 189, Grove St, Los Angeles',
-        zip: 'CA 90036',
-        tag: 'Office',
-    },
-    {
-        date: '2016-05-01',
-        name: 'Tom',
-        state: 'California',
-        city: 'Los Angeles',
-        address: 'No. 189, Grove St, Los Angeles',
-        zip: 'CA 90036',
-        tag: 'Office',
-    },
-    {
-        date: '2016-05-092',
-        name: 'Tom',
-        state: 'California',
-        city: 'Los Angeles',
-        address: 'No. 189, Grove St, Los Angeles',
-        zip: 'CA 90036',
-        tag: 'Office',
-    },
-    {
-        date: '2016-605-702',
-        name: 'Tom',
-        state: 'California',
-        city: 'Los Angeles',
-        address: 'No. 189, Grove St, Los Angeles',
-        zip: 'CA 90036',
-        tag: 'Office',
-    }, {
-        date: '20156-405-02',
-        name: 'Tom',
-        state: 'California',
-        city: 'Los Angeles',
-        address: 'No. 189, Grove St, Los Angeles',
-        zip: 'CA 90036',
-        tag: 'Office',
-    },
-    {
-        date: '2016-055-02',
-        name: 'Tom',
-        state: 'California',
-        city: 'Los Angeles',
-        address: 'No. 189, Grove St, Los Angeles',
-        zip: 'CA 90036',
-        tag: 'Office',
-    },
-    {
-        date: '20616-05-02',
-        name: 'Tom',
-        state: 'California',
-        city: 'Los Angeles',
-        address: 'No. 189, Grove St, Los Angeles',
-        zip: 'CA 90036',
-        tag: 'Office',
-    },
-    {
-        date: '206316-05-02',
-        name: 'Tom',
-        state: 'California',
-        city: 'Los Angeles',
-        address: 'No. 189, Grove St, Los Angeles',
-        zip: 'CA 90036',
-        tag: 'Office',
-    },
-    {
-        date: '206156-05-02',
-        name: 'Tom',
-        state: 'California',
-        city: 'Los Angeles',
-        address: 'No. 189, Grove St, Los Angeles',
-        zip: 'CA 90036',
-        tag: 'Office',
-    }
-]
-
-
-const filterWeaponAttributes = (value: any): void =>{
+const filterWeaponAttributes = (value: string[]): void =>{
     debugger
     console.log(value)
+    armsQueryParams.value.attributeType = value.join(',')
+    console.log(armsQueryParams.value.attributeType)
 }
 
 
@@ -214,7 +144,9 @@ const edit = () => {
 }
 
 const queryList = ()=>{
-    console.log("然后触发了父表单的刷新")
+    ArmsAPI.selectAllArmsInfo(armsQueryParams.value).then(request=>{
+        tableData.splice(0, tableData.length, ...request.data);
+    })
     dialogFormVisible.value = false
 }
 
@@ -222,6 +154,7 @@ const saveFormData=()=>{
     weaponsFormModalRef.value.save()
 }
 
+onMounted(() => queryList())
 
 </script>
 

@@ -1,10 +1,12 @@
 <script setup lang="ts">
 
 import {Delete, Plus} from "@element-plus/icons-vue";
-import {reactive, ref} from "vue";
+import {reactive, ref, watch} from "vue";
 import {FormInstance, FormRules, UploadProps} from "element-plus";
 import {v4 as uuidv4} from 'uuid';
 import {weaponAttributes, weaponType} from "@/types/hotta/arms/basic-info";
+import {ArmsAPI} from "@/api/hotta/arms";
+import type {ItemsBasic,ArmsInfo } from '@/types/hotta/arms/basic-info'
 
 const armsCharacteristics = ref()
 const armsExclusives = ref()
@@ -15,7 +17,7 @@ const armsSkillAttacks = ref()
 const armsCooperationAttacks = ref()
 const formRef = ref<FormInstance | null>(null);
 
-const {formDataId, isEdit} = defineProps({
+const props = defineProps({
     formDataId: {
         type: String,
     },
@@ -25,36 +27,7 @@ const {formDataId, isEdit} = defineProps({
     }
 });
 
-interface ItemsBasic {
-    itemsId: string
-    itemsName: string,
-    itemsDescribe: string
-}
 
-interface ArmsInfo {
-    armsId: string,
-    armsName: string,
-    armsRarity: string,
-    armsType: string,
-    armsAttribute: string,
-    armsOverwhelmed: number,
-    armsChargingEnergy: number,
-    armsAggressivityStart: number,
-    armsBloodVolumeStart: number,
-    armsDefenseCapabilityStart: number,
-    armsCriticalStrikeStart: number,
-    armsAggressivityEnd: number,
-    armsBloodVolumeEnd: number,
-    armsDefenseCapabilityEnd: number,
-    armsCriticalStrikeEnd: number,
-    armsCharacteristics: ItemsBasic[],
-    armsExclusives: ItemsBasic[],
-    armsStarRatings: ItemsBasic[],
-    armsPrimaryAttacks: ItemsBasic[],
-    armsDodgeAttacks: ItemsBasic[],
-    armsSkillAttacks: ItemsBasic[],
-    armsCooperationAttacks: ItemsBasic[]
-}
 
 const formData = reactive<ArmsInfo>({
     armsId: '',
@@ -64,6 +37,7 @@ const formData = reactive<ArmsInfo>({
     armsAttribute: '',
     armsOverwhelmed: null,
     armsChargingEnergy: null,
+    armsDescription:'',
     armsAggressivityStart: null,
     armsBloodVolumeStart: null,
     armsDefenseCapabilityStart: null,
@@ -171,15 +145,30 @@ const save = async () => {
     if (!formRef.value) return;
     await formRef.value.validate((valid, fields) => {
         if (valid) {
+            debugger
             console.log("这是子表单的save");
             console.log(formData);
-            emit('save');
+            ArmsAPI.addArmsInfo(formData)
+            // emit('save');
             console.log('submit!');
         } else {
             console.log('error submit!', fields);
         }
     });
 };
+
+
+watch(
+    () => props,
+    async (newValue) => {
+        if(newValue.formDataId != null && newValue.formDataId != '' && newValue.isEdit != 'add' ){
+            //Todo 查数据
+        }
+    },
+    {immediate: true, deep: true}
+)
+
+
 
 defineExpose({
     save
@@ -283,6 +272,15 @@ defineExpose({
                         </el-form-item>
                     </el-col>
                 </el-row>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <el-form-item label="武器描述" :label-width="formLabelWidth" prop="armsDescription">
+                    <el-input type="textarea" v-model="formData.armsDescription" placeholder="武器描述"
+                              autosize="autosize"/>
+                </el-form-item>
+
             </el-col>
         </el-row>
         <el-divider content-position="left">升级属性</el-divider>

@@ -1,3 +1,5 @@
+import {BasePageModel} from "@/types/common/page";
+
 export const weaponAttributes = [
     {
         label: '物理',
@@ -65,3 +67,41 @@ export const weaponType = [
         src: new URL('@/assets/hotta/weapons-type-icon/cc.png', import.meta.url).href
     }
 ]
+
+
+export interface ItemsBasic {
+    itemsId: string
+    itemsName: string,
+    itemsDescribe: string
+}
+
+export interface ArmsInfo {
+    armsId: string,
+    armsName: string,
+    armsRarity: string,
+    armsType: string,
+    armsAttribute: string,
+    armsOverwhelmed: number,
+    armsChargingEnergy: number,
+    armsDescription:string,
+    armsAggressivityStart: number,
+    armsBloodVolumeStart: number,
+    armsDefenseCapabilityStart: number,
+    armsCriticalStrikeStart: number,
+    armsAggressivityEnd: number,
+    armsBloodVolumeEnd: number,
+    armsDefenseCapabilityEnd: number,
+    armsCriticalStrikeEnd: number,
+    armsCharacteristics: ItemsBasic[],
+    armsExclusives: ItemsBasic[],
+    armsStarRatings: ItemsBasic[],
+    armsPrimaryAttacks: ItemsBasic[],
+    armsDodgeAttacks: ItemsBasic[],
+    armsSkillAttacks: ItemsBasic[],
+    armsCooperationAttacks: ItemsBasic[]
+}
+
+
+export interface ArmsPage extends BasePageModel{
+    attributeType: string
+}
