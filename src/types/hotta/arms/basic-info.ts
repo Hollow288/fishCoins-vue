@@ -103,5 +103,5 @@ export interface ArmsInfo {
 
 
 export interface ArmsPage extends BasePageModel{
-    attributeType: string
+    attribute_type: string
 }

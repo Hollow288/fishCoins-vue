@@ -1,4 +1,4 @@
 export interface BasePageModel{
     page: number,
-    pageSize: number
+    page_size: number
 }

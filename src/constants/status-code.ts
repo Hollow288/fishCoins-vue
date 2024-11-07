@@ -20,7 +20,13 @@ export enum StatusCode {
   TOO_MANY_REQUESTS = 429,
   INTERNAL_SERVER_ERROR = 500,
   BAD_GATEWAY = 502,
-  GATEWAY_TIMEOUT = 504
+  GATEWAY_TIMEOUT = 504,
+
+  ACCESS_TOKEN_ERR = 40001,
+  REFRESH_TOKEN_ERR = 40011,
+  FORBIDDEN_ROLE_ERR = 40003,
+  REQUEST_SERVER_ERROR = 50000
+
 }
 
 /**
@@ -38,5 +44,10 @@ export const errorMessageMap = new Map<number, string>([
   [StatusCode.TOO_MANY_REQUESTS, '429: Too Many Requests!'],
   [StatusCode.INTERNAL_SERVER_ERROR, '500: Internal Server Error!'],
   [StatusCode.BAD_GATEWAY, '502: Bad Gateway!'],
-  [StatusCode.GATEWAY_TIMEOUT, '504: Gateway Timeout!']
+  [StatusCode.GATEWAY_TIMEOUT, '504: Gateway Timeout!'],
+
+  [StatusCode.ACCESS_TOKEN_ERR, '40001: 验证请求token时错误!'],
+  [StatusCode.REFRESH_TOKEN_ERR, '40011: 获取刷新token时错误!'],
+  [StatusCode.FORBIDDEN_ROLE_ERR, '40003: 请求被理解但拒绝执行!'],
+  [StatusCode.REQUEST_SERVER_ERROR, '50000: 服务器错误!'],
 ])

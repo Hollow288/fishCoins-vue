@@ -2,6 +2,7 @@ import {GlobalEnvConfig} from "@/constants/environments";
 import {httpRequest} from "@/api/axios";
 import type { BaseResponse} from "@/types/axios"
 import {UserTokenResponse} from "@/types/auth";
+import {Token} from "@/types/axios";
 // 登录类型
 enum LoginType {
   USERNAME = 1, // 用户名登录
@@ -35,23 +36,14 @@ export class AuthAPI {
   /**
    * 刷新令牌
    */
-  static async refresh(token: string) {
-    return httpRequest.post<object>(
+  static async refresh(token: string):Promise<BaseResponse<Token>> {
+    return httpRequest.post<BaseResponse<Token>>(
       this.REFRESH_API_URL,
       {},
       { params: { token } }
     )
   }
 
-  /**
-   * GitHub 登录
-   */
-  // static loginWithGitHub(code: string) {
-  //   return httpRequest.post<object>(
-  //     `${this.AUTH_API_PREFIX}/login/github`,
-  //     { code }
-  //   )
-  // }
 
 
   // static bindWithGitHub(code: string) {

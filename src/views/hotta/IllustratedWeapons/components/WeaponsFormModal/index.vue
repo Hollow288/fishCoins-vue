@@ -19,7 +19,7 @@ const formRef = ref<FormInstance | null>(null);
 
 const props = defineProps({
     formDataId: {
-        type: String,
+        type: Number,
     },
     isEdit: {
         type: String,
@@ -29,7 +29,7 @@ const props = defineProps({
 
 
 
-const formData = reactive<ArmsInfo>({
+const formData = ref<ArmsInfo>({
     armsId: '',
     armsName: '',
     armsRarity: '',
@@ -93,37 +93,37 @@ const addOneRow = (params: ItemsBasic[]) => {
 
 const deleteArmsCharacteristics = () => {
     const selectedIds = armsCharacteristics.value.getSelectionRows().map(row => row.itemsId);
-    formData.armsCharacteristics = formData.armsCharacteristics.filter(item => !selectedIds.includes(item.itemsId));
+    formData.value.armsCharacteristics = formData.value.armsCharacteristics.filter(item => !selectedIds.includes(item.itemsId));
 }
 
 const deleteArmsExclusives = () => {
     const selectedIds = armsExclusives.value.getSelectionRows().map(row => row.itemsId);
-    formData.armsExclusives = formData.armsExclusives.filter(item => !selectedIds.includes(item.itemsId));
+    formData.value.armsExclusives = formData.value.armsExclusives.filter(item => !selectedIds.includes(item.itemsId));
 }
 
 const deleteArmsStarRatings = () => {
     const selectedIds = armsStarRatings.value.getSelectionRows().map(row => row.itemsId);
-    formData.armsStarRatings = formData.armsStarRatings.filter(item => !selectedIds.includes(item.itemsId));
+    formData.value.armsStarRatings = formData.value.armsStarRatings.filter(item => !selectedIds.includes(item.itemsId));
 }
 
 const deleteArmsPrimaryAttacks = () => {
     const selectedIds = armsPrimaryAttacks.value.getSelectionRows().map(row => row.itemsId);
-    formData.armsPrimaryAttacks = formData.armsPrimaryAttacks.filter(item => !selectedIds.includes(item.itemsId));
+    formData.value.armsPrimaryAttacks = formData.value.armsPrimaryAttacks.filter(item => !selectedIds.includes(item.itemsId));
 }
 
 const deleteArmsDodgeAttacks = () => {
     const selectedIds = armsDodgeAttacks.value.getSelectionRows().map(row => row.itemsId);
-    formData.armsDodgeAttacks = formData.armsDodgeAttacks.filter(item => !selectedIds.includes(item.itemsId));
+    formData.value.armsDodgeAttacks = formData.value.armsDodgeAttacks.filter(item => !selectedIds.includes(item.itemsId));
 }
 
 const deleteArmsSkillAttacks = () => {
     const selectedIds = armsSkillAttacks.value.getSelectionRows().map(row => row.itemsId);
-    formData.armsSkillAttacks = formData.armsSkillAttacks.filter(item => !selectedIds.includes(item.itemsId));
+    formData.value.armsSkillAttacks = formData.value.armsSkillAttacks.filter(item => !selectedIds.includes(item.itemsId));
 }
 
 const deleteArmsCooperationAttacks = () => {
     const selectedIds = armsCooperationAttacks.value.getSelectionRows().map(row => row.itemsId);
-    formData.armsCooperationAttacks = formData.armsCooperationAttacks.filter(item => !selectedIds.includes(item.itemsId));
+    formData.value.armsCooperationAttacks = formData.value.armsCooperationAttacks.filter(item => !selectedIds.includes(item.itemsId));
 }
 
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
@@ -145,12 +145,8 @@ const save = async () => {
     if (!formRef.value) return;
     await formRef.value.validate((valid, fields) => {
         if (valid) {
-            debugger
-            console.log("这是子表单的save");
-            console.log(formData);
-            ArmsAPI.addArmsInfo(formData)
-            // emit('save');
-            console.log('submit!');
+            ArmsAPI.addArmsInfo(formData.value)
+            emit('save');
         } else {
             console.log('error submit!', fields);
         }
@@ -162,7 +158,8 @@ watch(
     () => props,
     async (newValue) => {
         if(newValue.formDataId != null && newValue.formDataId != '' && newValue.isEdit != 'add' ){
-            //Todo 查数据
+            const request = await ArmsAPI.selectIdArmsInfo(newValue.formDataId);
+            formData.value = request.data
         }
     },
     {immediate: true, deep: true}
@@ -231,7 +228,7 @@ defineExpose({
                     </el-col>
                     <el-col :span="24">
                         <el-form-item label="武器破防" :label-width="formLabelWidth">
-                            <el-input v-model="formData.armsOverwhelmed" placeholder="武器破防"/>
+                            <el-input type="number" v-model="formData.armsOverwhelmed" placeholder="武器破防"/>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -268,7 +265,7 @@ defineExpose({
                     </el-col>
                     <el-col :span="24">
                         <el-form-item label="武器充能" :label-width="formLabelWidth">
-                            <el-input v-model="formData.armsChargingEnergy" placeholder="武器充能"/>
+                            <el-input type="number" v-model="formData.armsChargingEnergy" placeholder="武器充能"/>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -287,44 +284,44 @@ defineExpose({
         <el-row>
             <el-col :span="6">
                 <el-form-item label="初始攻击" :label-width="formLabelWidth">
-                    <el-input v-model="formData.armsAggressivityStart" placeholder="初始攻击"/>
+                    <el-input type="number" v-model="formData.armsAggressivityStart" placeholder="初始攻击"/>
                 </el-form-item>
             </el-col>
             <el-col :span="6">
                 <el-form-item label="初始血量" :label-width="formLabelWidth">
-                    <el-input v-model="formData.armsBloodVolumeStart" placeholder="初始血量"/>
+                    <el-input type="number" v-model="formData.armsBloodVolumeStart" placeholder="初始血量"/>
                 </el-form-item>
             </el-col>
             <el-col :span="6">
                 <el-form-item label="初始全抗" :label-width="formLabelWidth">
-                    <el-input v-model="formData.armsDefenseCapabilityStart" placeholder="初始全抗"/>
+                    <el-input type="number" v-model="formData.armsDefenseCapabilityStart" placeholder="初始全抗"/>
                 </el-form-item>
             </el-col>
             <el-col :span="6">
                 <el-form-item label="初始暴击" :label-width="formLabelWidth">
-                    <el-input v-model="formData.armsCriticalStrikeStart" placeholder="初始暴击"/>
+                    <el-input type="number" v-model="formData.armsCriticalStrikeStart" placeholder="初始暴击"/>
                 </el-form-item>
             </el-col>
         </el-row>
         <el-row>
             <el-col :span="6">
                 <el-form-item label="满级攻击" :label-width="formLabelWidth">
-                    <el-input v-model="formData.armsAggressivityEnd" placeholder="满级攻击"/>
+                    <el-input type="number" v-model="formData.armsAggressivityEnd" placeholder="满级攻击"/>
                 </el-form-item>
             </el-col>
             <el-col :span="6">
                 <el-form-item label="满级血量" :label-width="formLabelWidth">
-                    <el-input v-model="formData.armsBloodVolumeEnd" placeholder="满级血量"/>
+                    <el-input type="number" v-model="formData.armsBloodVolumeEnd" placeholder="满级血量"/>
                 </el-form-item>
             </el-col>
             <el-col :span="6">
                 <el-form-item label="满级全抗" :label-width="formLabelWidth">
-                    <el-input v-model="formData.armsDefenseCapabilityEnd" placeholder="满级全抗"/>
+                    <el-input type="number" v-model="formData.armsDefenseCapabilityEnd" placeholder="满级全抗"/>
                 </el-form-item>
             </el-col>
             <el-col :span="6">
                 <el-form-item label="满级暴击" :label-width="formLabelWidth">
-                    <el-input v-model="formData.armsCriticalStrikeEnd" placeholder="满级暴击"/>
+                    <el-input type="number" v-model="formData.armsCriticalStrikeEnd" placeholder="满级暴击"/>
                 </el-form-item>
             </el-col>
         </el-row>

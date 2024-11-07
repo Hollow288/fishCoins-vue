@@ -1,6 +1,6 @@
 import {GlobalEnvConfig} from "@/constants/environments";
 import {httpRequest} from "@/api/axios";
-import {BaseResponse} from "@/types/axios";
+import {BaseResponse, PageResponse} from "@/types/axios";
 import {UserTokenResponse} from "@/types/auth";
 import type {ItemsBasic,ArmsInfo } from '@/types/hotta/arms/basic-info'
 import {ArmsPage} from "@/types/hotta/arms/basic-info";
@@ -18,11 +18,14 @@ export class ArmsAPI {
       })
     }
 
-    static selectAllArmsInfo(params:ArmsPage) {
-        return httpRequest.get<BaseResponse<ArmsInfo[]>>(`${this.ARMS_API_PREFIX}/all-arms`,{
+    static selectPageArmsInfo(params:ArmsPage) {
+        return httpRequest.get<PageResponse<ArmsInfo[]>>(`${this.ARMS_API_PREFIX}/page-arms`,{
           ...params
         })
     }
 
+    static selectIdArmsInfo(params:number) {
+        return httpRequest.get<BaseResponse<ArmsInfo>>(`${this.ARMS_API_PREFIX}/id-arms/${params}`,)
+    }
 
 }

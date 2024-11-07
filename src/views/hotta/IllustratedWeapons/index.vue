@@ -31,13 +31,13 @@
         </div>
     </div>
 
-    <el-table ref="formRef" :data="tableData" style="width: 100%; height: 100%;" size="large" >
+    <el-table ref="formRef" :data="tableData" style="width: 100%; height: 100%;" size="large" v-loading="loading" >
         <el-table-column type="selection"  width="55"/>
         <el-table-column fixed prop="armsName" label="武器名称" width="150"/>
         <el-table-column prop="armsId" label="武器ID" width="120"/>
         <el-table-column prop="armsAttribute" label="武器属性" width="120">
             <template #default="scope">
-                <div style="display: flex; align-items: center;">
+                <div style="display: flex; align-items: center;" v-if="scope.row.armsAttribute != null && scope.row.armsAttribute != ''">
                     <img  :src="findAttributeImgSrcByValue(scope.row.armsAttribute)" :alt="findAttributeImgSrcByValue(scope.row.armsAttribute)"  style="width: 18px; height: 18px;margin-right: 5px">
                     <span>{{ scope.row.armsAttribute }} </span>
                 </div>
@@ -45,7 +45,7 @@
         </el-table-column>
         <el-table-column prop="armsType" label="武器定位" width="120">
             <template #default="scope">
-                <div style="display: flex; align-items: center;">
+                <div style="display: flex; align-items: center;" v-if="scope.row.armsType != null && scope.row.armsType != ''">
                     <img  :src="findTypeImgSrcByValue(scope.row.armsType)" :alt="findTypeImgSrcByValue(scope.row.armsType)"  style="width: 18px; height: 18px;margin-right: 5px">
                     <span>{{ scope.row.armsType }} </span>
                 </div>
@@ -68,7 +68,8 @@
                 :page-size="10"
                 background
                 layout="prev, pager, next"
-                :total="1000"
+                :total="formTotal"
+                @current-change="handleCurrentChange"
         />
     </div>
 
@@ -104,7 +105,9 @@ const rowDataId = ref(null)
 const isEdit = ref('')
 const value = ref<string[]>([])
 let tableData = reactive<ArmsInfo[]>([])
-const armsQueryParams = ref<ArmsPage>({page:1,pageSize:10,attributeType:''})
+const armsQueryParams = ref<ArmsPage>({page:1,page_size:10,attribute_type:''})
+const formTotal = ref<number>(null)
+const loading = ref(false)
 
 const handleClick = () => {
     console.log('click')
@@ -122,10 +125,8 @@ const findTypeImgSrcByValue = (value: string) : string =>{
 
 
 const filterWeaponAttributes = (value: string[]): void =>{
-    debugger
-    console.log(value)
-    armsQueryParams.value.attributeType = value.join(',')
-    console.log(armsQueryParams.value.attributeType)
+    armsQueryParams.value.attribute_type = value.join(',')
+    queryList()
 }
 
 
@@ -140,15 +141,28 @@ const edit = () => {
     const editList = formRef.value.getSelectionRows()
     if(editList.length == 0 || editList.length > 1){
         ElMessage.warning('仅能选择一条数据修改！');
+        return
     }
+    rowDataId.value = editList[0].armsId
+    isEdit.value = 'edit'
+    dialogFormVisible.value = true
+}
+
+const handleCurrentChange = (val: number) => {
+    armsQueryParams.value.page = val
+    queryList()
 }
 
 const queryList = ()=>{
-    ArmsAPI.selectAllArmsInfo(armsQueryParams.value).then(request=>{
-        tableData.splice(0, tableData.length, ...request.data);
+    loading.value = true
+    ArmsAPI.selectPageArmsInfo(armsQueryParams.value).then(request=>{
+        tableData.splice(0, tableData.length, ...request.data.data);
+        formTotal.value = request.data.total
+        loading.value = false
     })
     dialogFormVisible.value = false
 }
+
 
 const saveFormData=()=>{
     weaponsFormModalRef.value.save()
