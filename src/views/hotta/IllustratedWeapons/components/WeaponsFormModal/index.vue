@@ -2,11 +2,12 @@
 
 import {Delete, Plus} from "@element-plus/icons-vue";
 import {reactive, ref, watch} from "vue";
-import {FormInstance, FormRules, UploadProps} from "element-plus";
+import {ElMessage, FormInstance, FormRules, UploadProps} from "element-plus";
 import {v4 as uuidv4} from 'uuid';
 import {weaponAttributes, weaponType} from "@/types/hotta/arms/basic-info";
 import {ArmsAPI} from "@/api/hotta/arms";
 import type {ItemsBasic,ArmsInfo } from '@/types/hotta/arms/basic-info'
+import {UploadAPI} from "@/api/upload";
 
 const armsCharacteristics = ref()
 const armsExclusives = ref()
@@ -16,6 +17,9 @@ const armsDodgeAttacks = ref()
 const armsSkillAttacks = ref()
 const armsCooperationAttacks = ref()
 const formRef = ref<FormInstance | null>(null);
+const fileListRef = ref([])
+// attach is edit ?
+const fileIsEdit = ref<boolean>(false)
 
 const props = defineProps({
     formDataId: {
@@ -35,6 +39,7 @@ const formData = ref<ArmsInfo>({
     armsRarity: '',
     armsType: '',
     armsAttribute: '',
+    armsThumbnailUrl:'',
     armsOverwhelmed: null,
     armsChargingEnergy: null,
     armsDescription:'',
@@ -79,8 +84,6 @@ const emit = defineEmits<{
 
 
 const formLabelWidth = '100px'
-
-const imageUrl = ref('')
 
 const getRowKey = (row: ItemsBasic) => {
     return row.itemsId;
@@ -138,15 +141,78 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
 }
 
 const handleChange = (file) => {
-    imageUrl.value = URL.createObjectURL(file.raw!)
+    formData.value.armsThumbnailUrl = URL.createObjectURL(file.raw!)
+    fileIsEdit.value = true
+    fileListRef.value.splice(0, fileListRef.value.length)
+    fileListRef.value.push(file.raw)
 };
 
 const save = async () => {
     if (!formRef.value) return;
-    await formRef.value.validate((valid, fields) => {
+    await formRef.value.validate(async (valid, fields) => {
         if (valid) {
-            ArmsAPI.addArmsInfo(formData.value)
-            emit('save');
+            if(props.isEdit == 'add'){
+                if (!formData.value.armsId) {
+                    const {code, data, message} = await ArmsAPI.addArmsInfo(formData.value)
+                    if (code === 200) {
+                        formData.value.armsId = data.armsId
+                    } else {
+                        ElMessage.error("新增失败了 "+message)
+                        return
+                    }
+                }
+                if (fileListRef.value.length <= 0) {
+                    ElMessage.success('保存成功')
+                    emit('save');
+                }
+                else {
+                    const fileData = new FormData()
+                    fileListRef.value.forEach(file => {
+                        fileData.append('file', file)
+                    })
+
+                    const {code, message} = await UploadAPI.uploadArmsImgFile(fileData, formData.value.armsId)
+                    if (code === 200) {
+                        ElMessage.success('保存成功')
+                        emit('save');
+                    } else {
+                        ElMessage.error(message)
+                        return
+                    }
+                }
+            }
+
+            if(props.isEdit == 'edit'){
+                if (formData.value.armsId) {
+                    const {code, data, message} = await ArmsAPI.editArmsInfo(formData.value)
+                    if (code === 200) {
+                        formData.value.armsId = data.armsId
+                    } else {
+                        ElMessage.error("修改失败了 "+message)
+                        return
+                    }
+                }
+                if (fileListRef.value.length > 0 && fileIsEdit.value) {
+                    const fileData = new FormData()
+                    fileListRef.value.forEach(file => {
+                        fileData.append('file', file)
+                    })
+
+                    const {code, message} = await UploadAPI.uploadArmsImgFile(fileData, formData.value.armsId)
+                    if (code === 200) {
+                        ElMessage.success('保存成功')
+                        emit('save');
+                    } else {
+                        ElMessage.error(message)
+                        return
+                    }
+                }
+                else {
+                    ElMessage.success('保存成功')
+                    emit('save');
+                }
+            }
+
         } else {
             console.log('error submit!', fields);
         }
@@ -157,7 +223,7 @@ const save = async () => {
 watch(
     () => props,
     async (newValue) => {
-        if(newValue.formDataId != null && newValue.formDataId != '' && newValue.isEdit != 'add' ){
+        if(newValue.formDataId  && newValue.isEdit != 'add' ){
             const request = await ArmsAPI.selectIdArmsInfo(newValue.formDataId);
             formData.value = request.data
         }
@@ -175,7 +241,7 @@ defineExpose({
 </script>
 
 <template>
-    <el-form ref="formRef" :model="formData" style="width: 100%;height: 600px;overflow-y: auto;padding: 5px" :rules="rules">
+    <el-form ref="formRef" :model="formData" style="width: 100%;height: 600px;overflow-y: auto;padding: 5px" :rules="rules" >
         <el-divider content-position="left">基础信息</el-divider>
         <el-row>
             <el-col :span="8">
@@ -187,7 +253,7 @@ defineExpose({
                             :before-upload="beforeAvatarUpload"
                             :on-change="handleChange"
                     >
-                        <img v-if="imageUrl" :src="imageUrl" class="avatar"/>
+                        <el-image v-if="formData.armsThumbnailUrl" :src="formData.armsThumbnailUrl" class="avatar"/>
                         <el-icon v-else class="avatar-uploader-icon">
                             <Plus/>
                         </el-icon>
@@ -520,8 +586,8 @@ defineExpose({
 
 <style scoped>
 .avatar-uploader .avatar {
-    width: 178px;
-    height: 178px;
+    width: 150px;
+    height: 150px;
     display: block;
 }
 </style>

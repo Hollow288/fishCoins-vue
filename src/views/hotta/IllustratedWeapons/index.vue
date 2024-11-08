@@ -24,14 +24,14 @@
             <el-button text bg :icon="Edit" @click="edit">
                 修改
             </el-button>
-            <el-button text bg :icon="Delete">
+            <el-button text bg :icon="Delete" @click="deletes">
                 删除
             </el-button>
             <el-button :icon="RefreshRight" circle @click="queryList"/>
         </div>
     </div>
 
-    <el-table ref="formRef" :data="tableData" style="width: 100%; height: 100%;" size="large" v-loading="loading" >
+    <el-table ref="formRef" :data="tableData" style="width: 100%; height: 100%;" size="large" v-loading="loading" @row-dblclick="view">
         <el-table-column type="selection"  width="55"/>
         <el-table-column fixed prop="armsName" label="武器名称" width="150"/>
         <el-table-column prop="armsId" label="武器ID" width="120"/>
@@ -51,14 +51,22 @@
                 </div>
             </template>
         </el-table-column>
-        <el-table-column prop="armsThumbnailUrl" label="武器缩略图" width="120"/>
+        <el-table-column prop="armsThumbnailUrl" label="武器缩略图" width="120">
+            <template #default="scope">
+                <el-image  preview-teleported :src="scope.row.armsThumbnailUrl">
+                    <template #error>
+                        <div class="image-slot">
+                            <el-image preview-teleported src="src/assets/img/zwtp.jpg"/>
+                        </div>
+                    </template>
+                </el-image>
+            </template>
+        </el-table-column>
         <el-table-column prop="armsDescription" label="武器描述" min-width="300"/>
-        <el-table-column fixed="right" label="操作" width="120" header-align="center">
+        <el-table-column fixed="right" label="操作" width="155" header-align="center">
             <template #default>
-                <el-button link type="primary" size="small" @click="handleClick">
-                    Detail
-                </el-button>
-                <el-button link type="primary" size="small">Edit</el-button>
+                <el-button link  size="small" @click="handleClick">绑定意志</el-button>
+                <el-button link  size="small">绑定拟态</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -69,17 +77,17 @@
                 background
                 layout="prev, pager, next"
                 :total="formTotal"
-                @current-change="handleCurrentChange"
+                v-model:current-page="armsQueryParams.page"
         />
     </div>
 
-    <el-dialog v-model="dialogFormVisible" title="Arms Info" width="1200"  draggable  align-center destroy-on-close>
+    <el-dialog v-model="dialogFormVisible" :title="dialogName" width="1200"  draggable  align-center destroy-on-close>
         <WeaponsFormModal :form-data-id="rowDataId" :is-edit="isEdit" ref="weaponsFormModalRef" @save="queryList"/>
         <template #footer>
             <div class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">Cancel</el-button>
-                <el-button type="primary" @click="saveFormData">
-                    Confirm
+                <el-button @click="dialogFormVisible = false">取消</el-button>
+                <el-button type="primary" @click="saveFormData" v-if="isEdit != 'view'">
+                    保存
                 </el-button>
             </div>
         </template>
@@ -90,11 +98,11 @@
 <script lang="ts" setup>
 import {Delete, Edit, Plus, RefreshRight} from "@element-plus/icons-vue";
 import {WeaponsFormModal} from './components'
-import {onMounted, reactive, ref} from "vue";
+import {reactive, ref, watch} from "vue";
 import {ArmsPage, weaponAttributes, weaponType} from '@/types/hotta/arms/basic-info'
 import {ElMessage} from "element-plus";
 import {ArmsAPI} from "@/api/hotta/arms";
-import type {ItemsBasic,ArmsInfo } from '@/types/hotta/arms/basic-info'
+import type {ArmsInfo } from '@/types/hotta/arms/basic-info'
 
 const dialogFormVisible = ref(false)
 
@@ -106,8 +114,9 @@ const isEdit = ref('')
 const value = ref<string[]>([])
 let tableData = reactive<ArmsInfo[]>([])
 const armsQueryParams = ref<ArmsPage>({page:1,page_size:10,attribute_type:''})
-const formTotal = ref<number>(null)
+const formTotal = ref<number>(0)
 const loading = ref(false)
+const dialogName =ref('')
 
 const handleClick = () => {
     console.log('click')
@@ -132,6 +141,7 @@ const filterWeaponAttributes = (value: string[]): void =>{
 
 const add = () => {
     weaponsFormModalRef.value
+    dialogName.value = "Arms Info - ADD"
     isEdit.value = 'add'
     rowDataId.value = null
     dialogFormVisible.value = true
@@ -144,23 +154,54 @@ const edit = () => {
         return
     }
     rowDataId.value = editList[0].armsId
+    dialogName.value = "Arms Info - EDIT"
     isEdit.value = 'edit'
     dialogFormVisible.value = true
 }
 
-const handleCurrentChange = (val: number) => {
-    armsQueryParams.value.page = val
-    queryList()
-}
+
+
+// const handleCurrentChange = (val: number) => {
+//     armsQueryParams.value.page = val
+//     queryList()
+// }
 
 const queryList = ()=>{
     loading.value = true
     ArmsAPI.selectPageArmsInfo(armsQueryParams.value).then(request=>{
         tableData.splice(0, tableData.length, ...request.data.data);
-        formTotal.value = request.data.total
+        formTotal.value = request.data.total || 0
         loading.value = false
     })
     dialogFormVisible.value = false
+}
+
+
+const deletes = () => {
+  const editList = formRef.value.getSelectionRows()
+  if(editList.length == 0){
+    ElMessage.warning('还没有选数据！');
+    return
+  }
+  let temList = []
+  editList.map((n: ArmsInfo)=>temList.push(n.armsId))
+  ArmsAPI.deleteArmsInfo({armsIds:temList}).then(request=>{
+    if(request.code === 200){
+      ElMessage.success(request.message)
+      queryList()
+    }else{
+      ElMessage.error(request.message)
+    }
+  })
+
+}
+
+
+const view = (row: ArmsInfo, column: any, event: Event) =>{
+  rowDataId.value = row.armsId
+  dialogName.value = "Arms Info - VIEW"
+  isEdit.value = 'view'
+  dialogFormVisible.value = true
 }
 
 
@@ -168,7 +209,15 @@ const saveFormData=()=>{
     weaponsFormModalRef.value.save()
 }
 
-onMounted(() => queryList())
+watch(
+    () => armsQueryParams.value.page,
+    async () => {
+       queryList()
+    },
+    {immediate: true,deep:true}
+)
+
+// onMounted(() => queryList())
 
 </script>
 

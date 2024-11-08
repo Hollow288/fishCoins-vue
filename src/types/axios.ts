@@ -1,6 +1,6 @@
 // 响应类型
 export interface Response {
-  code?: string
+  code?: number
   message?: string
 }
 

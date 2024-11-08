@@ -23,7 +23,7 @@ class Request {
   instance: AxiosInstance
 
   // 刷新令牌的标识
-  isRefreshing = false
+  isRefreshing : boolean = false
 
   // 等待请求队列
   pendingQueue: PendingTask[] = []
@@ -133,6 +133,9 @@ class Request {
           case StatusCode.INTERNAL_SERVER_ERROR:
             ElMessage.error("服务端错误!")
             break
+          case  StatusCode.BAD_DOWNSTREAM:
+            ElMessage.error("下游服务错误!")
+            break
           case StatusCode.BAD_GATEWAY:
           case StatusCode.GATEWAY_TIMEOUT:
             // NMessage.error(errorMessage)
@@ -162,14 +165,31 @@ class Request {
     AuthUtils.clearAccessToken()
     AuthUtils.clearRefreshToken()
     // 如果非登录页面，需要重定向到登录页，且需要带上 redirect 参数
-    router.replace({
-      path: '/login',
-      ...(router.currentRoute.value.fullPath && {
+    // router.replace({
+    //   path: '/login',
+    //   ...(router.currentRoute.value.fullPath && {
+    //     query: {
+    //       redirect: router.currentRoute.value.fullPath
+    //     }
+    //   })
+    // })
+
+    // 检查是否已经包含 `redirect` 参数，避免重复添加
+    const currentRoute = router.currentRoute.value;
+    const isRedirected = !!currentRoute.query.redirect;
+
+    if (!isRedirected) {
+      router.replace({
+        path: '/login',
         query: {
-          redirect: router.currentRoute.value.fullPath
+          redirect: currentRoute.fullPath
         }
-      })
-    })
+      });
+    } else {
+      // 如果已经包含了 redirect 参数，直接跳转到登录页
+      router.replace('/login');
+    }
+
   }
 
   /**

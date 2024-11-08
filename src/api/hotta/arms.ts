@@ -18,6 +18,18 @@ export class ArmsAPI {
       })
     }
 
+    static editArmsInfo(data: object) {
+        return httpRequest.put<BaseResponse<ArmsInfo>>(`${this.ARMS_API_PREFIX}/edit-arms`, {
+            ...data
+        })
+    }
+
+    static deleteArmsInfo(data: object) {
+        return httpRequest.put<BaseResponse<ArmsInfo>>(`${this.ARMS_API_PREFIX}/delete-arms`, {
+            ...data
+        })
+    }
+
     static selectPageArmsInfo(params:ArmsPage) {
         return httpRequest.get<PageResponse<ArmsInfo[]>>(`${this.ARMS_API_PREFIX}/page-arms`,{
           ...params

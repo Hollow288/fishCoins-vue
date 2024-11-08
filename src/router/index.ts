@@ -230,7 +230,7 @@ const routes: RouteRecordRaw[] = [
                     title: '武器图鉴',
                     permiss: '29',
                 },
-                component: () => import('../views/hotta/IllustratedWeapons/index.vue'),
+                component: () => import('@/views/hotta/IllustratedWeapons/index.vue'),
             }
         ],
     },

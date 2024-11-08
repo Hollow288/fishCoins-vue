@@ -68,8 +68,8 @@
                 </el-table-column>
             </template>
         </el-table>
-        <el-pagination v-if="hasPagination" :current-page="currentPage" :page-size="pageSize" :background="true"
-            :layout="layout" :total="total" @current-change="handleCurrentChange" />
+<!--        <el-pagination v-if="hasPagination" :current-page="currentPage" :page-size="pageSize" :background="true"-->
+<!--            :layout="layout" :total="total"  />-->
     </div>
 </template>
 

@@ -12,3 +12,8 @@ export const mix = (color1: string, color2: string, weight: number = 0.5): strin
     }
     return color;
 };
+
+
+export const isEmpty = (obj:any) =>{
+    return typeof obj == 'undefined' || obj == null || obj == '';
+}

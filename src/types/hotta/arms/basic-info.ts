@@ -81,6 +81,7 @@ export interface ArmsInfo {
     armsRarity: string,
     armsType: string,
     armsAttribute: string,
+    armsThumbnailUrl: string,
     armsOverwhelmed: number,
     armsChargingEnergy: number,
     armsDescription:string,
