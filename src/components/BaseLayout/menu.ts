@@ -45,7 +45,7 @@ export const menuData: Menus[] = [
                 pid: '8',
                 index: '/IllustratedWeapons',
                 title: '武器图鉴',
-                icon: 'Compass'
+                icon: 'Tickets'
             }
         ],
     },

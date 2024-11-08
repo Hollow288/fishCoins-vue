@@ -197,7 +197,7 @@ const deletes = () => {
 }
 
 
-const view = (row: ArmsInfo, column: any, event: Event) =>{
+const view = (row: ArmsInfo) =>{
   rowDataId.value = row.armsId
   dialogName.value = "Arms Info - VIEW"
   isEdit.value = 'view'

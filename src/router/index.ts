@@ -229,6 +229,7 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     title: '武器图鉴',
                     permiss: '29',
+                    icon: 'Tickets'
                 },
                 component: () => import('@/views/hotta/IllustratedWeapons/index.vue'),
             }
