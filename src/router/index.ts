@@ -224,14 +224,24 @@ const routes: RouteRecordRaw[] = [
                 component: () => import(/* webpackChunkName: "statistic" */ '../views/element/statistic.vue'),
             },
             {
-                path: '/IllustratedWeapons',
-                name: 'IllustratedWeapons',
+                path: '/IllustratedArms',
+                name: 'IllustratedArms',
                 meta: {
                     title: '武器图鉴',
                     permiss: '29',
                     icon: 'Tickets'
                 },
-                component: () => import('@/views/hotta/IllustratedWeapons/index.vue'),
+                component: () => import('@/views/hotta/IllustratedArms/index.vue'),
+            },
+            {
+                path: '/IllustratedWillpower',
+                name: 'IllustratedWillpower',
+                meta: {
+                    title: '意志图鉴',
+                    permiss: '30',
+                    icon: 'Memo'
+                },
+                component: () => import('@/views/hotta/IllustratedWillpower/index.vue'),
             }
         ],
     },
