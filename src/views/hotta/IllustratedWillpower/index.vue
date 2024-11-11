@@ -1,8 +1,30 @@
 <script setup lang="ts">
 
 import {Delete, Edit, Plus, RefreshRight} from "@element-plus/icons-vue";
-import {weaponAttributes} from "@/types/hotta/arms/basic-info";
+import {ArmsPage, weaponAttributes} from "@/types/hotta/arms/basic-info";
 import {WeaponsFormModal} from "@/views/hotta/IllustratedArms/components";
+import {onMounted, ref} from "vue";
+import {ArmsAPI} from "@/api/hotta/arms";
+import {WillpowerPage} from "@/types/hotta/willpower/basic-info";
+import {WillpowerAPI} from "@/api/hotta/willpower";
+const loading = ref(false)
+const willpowerQueryParams = ref<WillpowerPage>({page:1,page_size:10,search_name:''})
+
+const queryList = ()=>{
+  loading.value = true
+  WillpowerAPI.selectPageWillpowerInfo(willpowerQueryParams.value).then(request=>{
+    request
+    // tableData.splice(0, tableData.length, ...request.data.data);
+    // formTotal.value = request.data.total || 0
+    loading.value = false
+  })
+  // dialogFormVisible.value = false
+}
+
+
+
+
+onMounted(() => queryList())
 </script>
 
 <template>

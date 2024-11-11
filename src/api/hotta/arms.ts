@@ -6,7 +6,7 @@ import type {ItemsBasic,ArmsInfo } from '@/types/hotta/arms/basic-info'
 import {ArmsPage} from "@/types/hotta/arms/basic-info";
 
 export class ArmsAPI {
-    private static ARMS_API_PREFIX = `${GlobalEnvConfig.BASE_API_PREFIX}/base`
+    private static ARMS_API_PREFIX = `${GlobalEnvConfig.BASE_API_PREFIX}/base/arms`
 
 
     /**

@@ -122,6 +122,16 @@ const handleClick = () => {
     console.log('click')
 }
 
+const queryList = ()=>{
+  loading.value = true
+  ArmsAPI.selectPageArmsInfo(armsQueryParams.value).then(request=>{
+    tableData.splice(0, tableData.length, ...request.data.data);
+    formTotal.value = request.data.total || 0
+    loading.value = false
+  })
+  dialogFormVisible.value = false
+}
+
 
 
 const findAttributeImgSrcByValue = (value: string) : string =>{
@@ -166,15 +176,7 @@ const edit = () => {
 //     queryList()
 // }
 
-const queryList = ()=>{
-    loading.value = true
-    ArmsAPI.selectPageArmsInfo(armsQueryParams.value).then(request=>{
-        tableData.splice(0, tableData.length, ...request.data.data);
-        formTotal.value = request.data.total || 0
-        loading.value = false
-    })
-    dialogFormVisible.value = false
-}
+
 
 
 const deletes = () => {
