@@ -5,6 +5,7 @@ declare global {
   const AuthAPI: typeof import('./src/api/auth')['AuthAPI']
   const AuthUtils: typeof import('./src/utils/auth')['AuthUtils']
   const UploadAPI: typeof import('./src/api/upload')['UploadAPI']
+  const WillpowerAPI: typeof import('./src/api/hotta/willpower')['WillpowerAPI']
   const china: typeof import('./src/utils/china')['default']
   const fetchData: typeof import('./src/api/index')['fetchData']
   const fetchRoleData: typeof import('./src/api/index')['fetchRoleData']

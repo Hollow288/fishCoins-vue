@@ -1,24 +1,40 @@
 <script setup lang="ts">
 
 import {Delete, Edit, Plus, RefreshRight} from "@element-plus/icons-vue";
-import {ArmsPage, weaponAttributes} from "@/types/hotta/arms/basic-info";
-import {WeaponsFormModal} from "@/views/hotta/IllustratedArms/components";
-import {onMounted, ref} from "vue";
-import {ArmsAPI} from "@/api/hotta/arms";
-import {WillpowerPage} from "@/types/hotta/willpower/basic-info";
+import {WillpowerFormModal} from './components'
+import {onMounted, reactive, ref} from "vue";
+const dialogFormVisible = ref(false)
+import {WillpowerInfo, WillpowerPage} from "@/types/hotta/willpower/basic-info";
 import {WillpowerAPI} from "@/api/hotta/willpower";
-const loading = ref(false)
 const willpowerQueryParams = ref<WillpowerPage>({page:1,page_size:10,search_name:''})
+let tableData = reactive<WillpowerInfo[]>([])
+const formTotal = ref<number>(0)
+const loading = ref(false)
+const dialogName =ref('')
+const willpowerFormModalRef = ref()
+const rowDataId = ref(null)
+const isEdit = ref('')
 
 const queryList = ()=>{
   loading.value = true
   WillpowerAPI.selectPageWillpowerInfo(willpowerQueryParams.value).then(request=>{
-    request
-    // tableData.splice(0, tableData.length, ...request.data.data);
-    // formTotal.value = request.data.total || 0
+    tableData.splice(0, tableData.length, ...request.data.data);
+    formTotal.value = request.data.total || 0
     loading.value = false
   })
-  // dialogFormVisible.value = false
+  dialogFormVisible.value = false
+}
+
+const add = () => {
+  willpowerFormModalRef.value
+  dialogName.value = "Willpower Info - ADD"
+  isEdit.value = 'add'
+  rowDataId.value = null
+  dialogFormVisible.value = true
+}
+
+const saveFormData=()=>{
+  willpowerFormModalRef.value.save()
 }
 
 
@@ -44,30 +60,14 @@ onMounted(() => queryList())
     </div>
   </div>
 
-<!--
+
   <el-table ref="formRef" :data="tableData" style="width: 100%; height: 100%;" size="large" v-loading="loading" @row-dblclick="view">
     <el-table-column type="selection"  width="55"/>
-    <el-table-column fixed prop="armsName" label="武器名称" width="150"/>
-    <el-table-column prop="armsId" label="武器ID" width="120"/>
-    <el-table-column prop="armsAttribute" label="武器属性" width="120">
+    <el-table-column fixed prop="willpowerName" label="意志名称" width="150"/>
+    <el-table-column prop="willpowerId" label="意志ID" width="120"/>
+    <el-table-column prop="willpowerThumbnailUrl" label="意志缩略图" width="120">
       <template #default="scope">
-        <div style="display: flex; align-items: center;" v-if="scope.row.armsAttribute != null && scope.row.armsAttribute != ''">
-          <img  :src="findAttributeImgSrcByValue(scope.row.armsAttribute)" :alt="findAttributeImgSrcByValue(scope.row.armsAttribute)"  style="width: 18px; height: 18px;margin-right: 5px">
-          <span>{{ scope.row.armsAttribute }} </span>
-        </div>
-      </template>
-    </el-table-column>
-    <el-table-column prop="armsType" label="武器定位" width="120">
-      <template #default="scope">
-        <div style="display: flex; align-items: center;" v-if="scope.row.armsType != null && scope.row.armsType != ''">
-          <img  :src="findTypeImgSrcByValue(scope.row.armsType)" :alt="findTypeImgSrcByValue(scope.row.armsType)"  style="width: 18px; height: 18px;margin-right: 5px">
-          <span>{{ scope.row.armsType }} </span>
-        </div>
-      </template>
-    </el-table-column>
-    <el-table-column prop="armsThumbnailUrl" label="武器缩略图" width="120">
-      <template #default="scope">
-        <el-image  preview-teleported :src="scope.row.armsThumbnailUrl">
+        <el-image  preview-teleported :src="scope.row.willpowerThumbnailUrl">
           <template #error>
             <div class="image-slot">
               <el-image preview-teleported src="src/assets/img/zwtp.jpg"/>
@@ -76,13 +76,7 @@ onMounted(() => queryList())
         </el-image>
       </template>
     </el-table-column>
-    <el-table-column prop="armsDescription" label="武器描述" min-width="300"/>
-    <el-table-column fixed="right" label="操作" width="155" header-align="center">
-      <template #default>
-        <el-button link  size="small" @click="handleClick">绑定意志</el-button>
-        <el-button link  size="small">绑定拟态</el-button>
-      </template>
-    </el-table-column>
+    <el-table-column prop="willpowerDescription" label="意志描述" min-width="300"/>
   </el-table>
 
   <div style="display: flex; justify-content: flex-end; padding: 20px 0 0;">
@@ -91,12 +85,12 @@ onMounted(() => queryList())
         background
         layout="prev, pager, next"
         :total="formTotal"
-        v-model:current-page="armsQueryParams.page"
+        v-model:current-page="willpowerQueryParams.page"
     />
   </div>
 
   <el-dialog v-model="dialogFormVisible" :title="dialogName" width="1200"  draggable  align-center destroy-on-close>
-    <ArmsFormModal :form-data-id="rowDataId" :is-edit="isEdit" ref="weaponsFormModalRef" @save="queryList"/>
+    <WillpowerFormModal :form-data-id="rowDataId" :is-edit="isEdit" ref="willpowerFormModalRef" @save="queryList"/>
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
@@ -106,7 +100,7 @@ onMounted(() => queryList())
       </div>
     </template>
   </el-dialog>
--->
+
 </template>
 
 <style scoped>

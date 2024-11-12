@@ -19,4 +19,10 @@ export class UploadAPI {
       headers: this.headers
     })
   }
+
+  static uploadWillpowerImgFile(data: any, willpowerId: string) {
+    return httpRequest.post<BaseResponse<{ path: string }>>(`${this.UPLOAD_API_PREFIX}/${willpowerId}/willpower-img`, data, {
+      headers: this.headers
+    })
+  }
 }

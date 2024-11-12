@@ -65,8 +65,9 @@
         <el-table-column prop="armsDescription" label="武器描述" min-width="300"/>
         <el-table-column fixed="right" label="操作" width="155" header-align="center">
             <template #default>
-                <el-button link  size="small" @click="handleClick">绑定意志</el-button>
-                <el-button link  size="small">绑定拟态</el-button>
+              <div style="display: flex;align-items: center;justify-content: center;">
+                <el-button link  size="small" @click="handleClick">绑定意志&拟态</el-button>
+              </div>
             </template>
         </el-table-column>
     </el-table>
@@ -82,7 +83,7 @@
     </div>
 
     <el-dialog v-model="dialogFormVisible" :title="dialogName" width="1200"  draggable  align-center destroy-on-close>
-        <WeaponsFormModal :form-data-id="rowDataId" :is-edit="isEdit" ref="weaponsFormModalRef" @save="queryList"/>
+        <ArmsFormModal :form-data-id="rowDataId" :is-edit="isEdit" ref="armsFormModalRef" @save="queryList"/>
         <template #footer>
             <div class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取消</el-button>
@@ -97,7 +98,7 @@
 
 <script lang="ts" setup>
 import {Delete, Edit, Plus, RefreshRight} from "@element-plus/icons-vue";
-import {WeaponsFormModal} from './components'
+import {ArmsFormModal} from './components'
 import {reactive, ref, watch} from "vue";
 import {ArmsPage, weaponAttributes, weaponType} from '@/types/hotta/arms/basic-info'
 import {ElMessage} from "element-plus";
@@ -106,7 +107,7 @@ import type {ArmsInfo } from '@/types/hotta/arms/basic-info'
 
 const dialogFormVisible = ref(false)
 
-const weaponsFormModalRef = ref()
+const armsFormModalRef = ref()
 const formRef = ref()
 
 const rowDataId = ref(null)
@@ -150,7 +151,7 @@ const filterWeaponAttributes = (value: string[]): void =>{
 
 
 const add = () => {
-    weaponsFormModalRef.value
+    armsFormModalRef.value
     dialogName.value = "Arms Info - ADD"
     isEdit.value = 'add'
     rowDataId.value = null
@@ -208,7 +209,7 @@ const view = (row: ArmsInfo) =>{
 
 
 const saveFormData=()=>{
-    weaponsFormModalRef.value.save()
+    armsFormModalRef.value.save()
 }
 
 watch(
