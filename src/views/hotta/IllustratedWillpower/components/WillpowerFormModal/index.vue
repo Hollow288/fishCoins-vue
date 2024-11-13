@@ -4,8 +4,7 @@ import {Delete, Plus} from "@element-plus/icons-vue";
 import {reactive, ref, watch} from "vue";
 import {ElMessage, FormInstance, FormRules, UploadProps} from "element-plus";
 import {v4 as uuidv4} from 'uuid';
-import {ArmsAPI} from "@/api/hotta/arms";
-import type {ItemsBasic,ArmsInfo } from '@/types/hotta/arms/basic-info'
+import type {ItemsBasic} from '@/types/hotta/arms/basic-info'
 import {UploadAPI} from "@/api/upload";
 import {
   WillpowerClassification,
@@ -178,7 +177,10 @@ watch(
     () => props,
     async (newValue) => {
         if(newValue.formDataId  && newValue.isEdit != 'add' ){
-            const request = await ArmsAPI.selectIdArmsInfo(newValue.formDataId);
+            const request = await WillpowerAPI.selectIdWillpowerInfo(newValue.formDataId);
+            //对于子表的ID处理错了,这里临时改改
+            request.data.willpowerClassification.map(n=>n.itemsId = uuidv4())
+            request.data.willpowerSuit.map(n=>n.itemsId = uuidv4())
             formData.value = request.data
         }
     },

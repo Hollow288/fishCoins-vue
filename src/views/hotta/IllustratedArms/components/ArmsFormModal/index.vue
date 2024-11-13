@@ -225,6 +225,15 @@ watch(
     async (newValue) => {
         if(newValue.formDataId  && newValue.isEdit != 'add' ){
             const request = await ArmsAPI.selectIdArmsInfo(newValue.formDataId);
+            //对于子表的ID处理错了,这里临时改改
+            request.data.armsCharacteristics.map(n=>n.itemsId = uuidv4())
+            request.data.armsExclusives.map(n=>n.itemsId = uuidv4())
+            request.data.armsStarRatings.map(n=>n.itemsId = uuidv4())
+            request.data.armsPrimaryAttacks.map(n=>n.itemsId = uuidv4())
+            request.data.armsDodgeAttacks.map(n=>n.itemsId = uuidv4())
+            request.data.armsSkillAttacks.map(n=>n.itemsId = uuidv4())
+            request.data.armsCooperationAttacks.map(n=>n.itemsId = uuidv4())
+
             formData.value = request.data
         }
     },

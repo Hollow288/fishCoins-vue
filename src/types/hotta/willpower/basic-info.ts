@@ -33,19 +33,19 @@ export interface WillpowerInfo {
 
 export const willpowerTypeList = [
     {
-        value: 'Option1',
-        label: 'Option1',
+        value: '思想',
+        label: '思想',
     },
     {
-        value: 'Option2',
-        label: 'Option2',
+        value: '记忆',
+        label: '记忆',
     },
     {
-        value: 'Option3',
-        label: 'Option3',
+        value: '信念',
+        label: '信念',
     },
     {
-        value: 'Option4',
-        label: 'Option4',
+        value: '情感',
+        label: '情感',
     }
 ]

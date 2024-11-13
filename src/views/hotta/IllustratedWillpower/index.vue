@@ -6,6 +6,8 @@ import {onMounted, reactive, ref} from "vue";
 const dialogFormVisible = ref(false)
 import {WillpowerInfo, WillpowerPage} from "@/types/hotta/willpower/basic-info";
 import {WillpowerAPI} from "@/api/hotta/willpower";
+import {Action, ElMessage, ElMessageBox} from "element-plus";
+import {Search } from '@element-plus/icons-vue'
 const willpowerQueryParams = ref<WillpowerPage>({page:1,page_size:10,search_name:''})
 let tableData = reactive<WillpowerInfo[]>([])
 const formTotal = ref<number>(0)
@@ -14,6 +16,7 @@ const dialogName =ref('')
 const willpowerFormModalRef = ref()
 const rowDataId = ref(null)
 const isEdit = ref('')
+const formRef = ref()
 
 const queryList = ()=>{
   loading.value = true
@@ -33,6 +36,67 @@ const add = () => {
   dialogFormVisible.value = true
 }
 
+const edit = () => {
+  const editList = formRef.value.getSelectionRows()
+  if(editList.length == 0 || editList.length > 1){
+    ElMessage.warning('仅能选择一条数据修改！');
+    return
+  }
+  rowDataId.value = editList[0].willpowerId
+  dialogName.value = "Willpower Info - EDIT"
+  isEdit.value = 'edit'
+  dialogFormVisible.value = true
+}
+
+
+const deletes = () => {
+  const editList = formRef.value.getSelectionRows()
+  if(editList.length == 0){
+    ElMessage.warning('还没有选数据！');
+    return
+  }
+
+  ElMessageBox.confirm(
+      '要删这些数据吗?',
+      '选择',
+      {
+        distinguishCancelAndClose: true,
+        cancelButtonText: '取消',
+        confirmButtonText: '删除',
+        type: 'warning',
+      }
+  )
+      .then(() => {
+        let temList = []
+        editList.map((n: WillpowerInfo)=>temList.push(n.willpowerId))
+        WillpowerAPI.deleteWillpowerInfo({willpowerIds:temList}).then(request=>{
+          if(request.code === 200){
+            ElMessage.success(request.message)
+            queryList()
+          }else{
+            ElMessage.error(request.message)
+          }
+        })
+
+      })
+      .catch((action: Action) => {
+        ElMessage({
+          type: 'info',
+          message:
+              action === 'cancel' ? '取消操作' : '取消操作',
+        })
+      })
+
+}
+
+const view = (row: WillpowerInfo) =>{
+  rowDataId.value = row.willpowerId
+  dialogName.value = "Willpower Info - VIEW"
+  isEdit.value = 'view'
+  dialogFormVisible.value = true
+}
+
+
 const saveFormData=()=>{
   willpowerFormModalRef.value.save()
 }
@@ -48,6 +112,18 @@ onMounted(() => queryList())
     <el-button text bg :icon="Plus" @click="add">
       新增
     </el-button>
+
+    <el-input
+        v-model="willpowerQueryParams.search_name"
+        style="width: 200px;margin-left: 10px; margin-right: auto;"
+        placeholder="搜索名称"
+    >
+      <template #suffix>
+        <el-icon class="el-input__icon" style="cursor: pointer;" @click="queryList"><search/></el-icon>
+      </template>
+    </el-input>
+
+
 
     <div style="display: flex; gap: 5px;">
       <el-button text bg :icon="Edit" @click="edit">
@@ -89,7 +165,7 @@ onMounted(() => queryList())
     />
   </div>
 
-  <el-dialog v-model="dialogFormVisible" :title="dialogName" width="1200"  draggable  align-center destroy-on-close>
+  <el-dialog v-model="dialogFormVisible" :title="dialogName" width="1200"  draggable  align-center destroy-on-close :close-on-click-modal="false">
     <WillpowerFormModal :form-data-id="rowDataId" :is-edit="isEdit" ref="willpowerFormModalRef" @save="queryList"/>
     <template #footer>
       <div class="dialog-footer">

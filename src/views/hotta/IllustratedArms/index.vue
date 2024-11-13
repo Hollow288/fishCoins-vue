@@ -24,9 +24,14 @@
             <el-button text bg :icon="Edit" @click="edit">
                 修改
             </el-button>
-            <el-button text bg :icon="Delete" @click="deletes">
+          <el-popconfirm title="要删除它们吗?" @confirm="deletes">
+            <template #reference>
+              <el-button text bg :icon="Delete" >
                 删除
-            </el-button>
+              </el-button>
+            </template>
+          </el-popconfirm>
+
             <el-button :icon="RefreshRight" circle @click="queryList"/>
         </div>
     </div>
@@ -63,10 +68,10 @@
             </template>
         </el-table-column>
         <el-table-column prop="armsDescription" label="武器描述" min-width="300"/>
-        <el-table-column fixed="right" label="操作" width="155" header-align="center">
+        <el-table-column fixed="right" label="绑定" width="155" header-align="center">
             <template #default>
               <div style="display: flex;align-items: center;justify-content: center;">
-                <el-button link  size="small" @click="handleClick">绑定意志&拟态</el-button>
+                <el-button link  size="default" @click="handleClick">意志&拟态</el-button>
               </div>
             </template>
         </el-table-column>
@@ -82,7 +87,7 @@
         />
     </div>
 
-    <el-dialog v-model="dialogFormVisible" :title="dialogName" width="1200"  draggable  align-center destroy-on-close>
+    <el-dialog v-model="dialogFormVisible" :title="dialogName" width="1200"  draggable  align-center destroy-on-close :close-on-click-modal="false">
         <ArmsFormModal :form-data-id="rowDataId" :is-edit="isEdit" ref="armsFormModalRef" @save="queryList"/>
         <template #footer>
             <div class="dialog-footer">

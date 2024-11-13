@@ -21,11 +21,21 @@ export class WillpowerAPI {
         })
     }
 
+    static deleteWillpowerInfo(data: object) {
+        return httpRequest.put<BaseResponse<WillpowerInfo>>(`${this.WILLPOWER_API_PREFIX}/delete-willpower`, {
+            ...data
+        })
+    }
+
 
     static editWillpowerInfo(data: object) {
         return httpRequest.put<BaseResponse<WillpowerInfo>>(`${this.WILLPOWER_API_PREFIX}/edit-willpower`, {
             ...data
         })
+    }
+
+    static selectIdWillpowerInfo(params:number) {
+        return httpRequest.get<BaseResponse<WillpowerInfo>>(`${this.WILLPOWER_API_PREFIX}/id-willpower/${params}`,)
     }
 
 
