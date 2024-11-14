@@ -1,15 +1,15 @@
 <script setup lang="ts">
 
 import {Delete, Edit, Plus, RefreshRight} from "@element-plus/icons-vue";
-import {WillpowerFormModal} from './components'
+import {MimicryFormModal} from './components'
 import {onMounted, reactive, ref, watch} from "vue";
 const dialogFormVisible = ref(false)
-import {WillpowerInfo, WillpowerPage} from "@/types/hotta/willpower/basic-info";
-import {WillpowerAPI} from "@/api/hotta/willpower";
+import {MimicryInfo, MimicryPage} from "@/types/hotta/mimicry/basic-info";
+import {MimicryAPI} from "@/api/hotta/mimicry";
 import {Action, ElMessage, ElMessageBox} from "element-plus";
 import {Search } from '@element-plus/icons-vue'
-const willpowerQueryParams = ref<WillpowerPage>({page:1,page_size:10,search_name:''})
-let tableData = reactive<WillpowerInfo[]>([])
+const mimicryQueryParams = ref<MimicryPage>({page:1,page_size:10,search_name:''})
+let tableData = reactive<MimicryInfo[]>([])
 const formTotal = ref<number>(0)
 const loading = ref(false)
 const dialogName =ref('')
@@ -20,7 +20,7 @@ const formRef = ref()
 
 const queryList = ()=>{
   loading.value = true
-  WillpowerAPI.selectPageWillpowerInfo(willpowerQueryParams.value).then(request=>{
+  MimicryAPI.selectPageMimicryInfo(mimicryQueryParams.value).then(request=>{
     tableData.splice(0, tableData.length, ...request.data.data);
     formTotal.value = request.data.total || 0
     loading.value = false
@@ -30,7 +30,7 @@ const queryList = ()=>{
 
 const add = () => {
   willpowerFormModalRef.value
-  dialogName.value = "Willpower Info - ADD"
+  dialogName.value = "Mimicry Info - ADD"
   isEdit.value = 'add'
   rowDataId.value = null
   dialogFormVisible.value = true
@@ -42,8 +42,8 @@ const edit = () => {
     ElMessage.warning('仅能选择一条数据修改！');
     return
   }
-  rowDataId.value = editList[0].willpowerId
-  dialogName.value = "Willpower Info - EDIT"
+  rowDataId.value = editList[0].mimicryId
+  dialogName.value = "Mimicry Info - EDIT"
   isEdit.value = 'edit'
   dialogFormVisible.value = true
 }
@@ -68,7 +68,7 @@ const deletes = () => {
   )
       .then(() => {
         let temList = []
-        editList.map((n: WillpowerInfo)=>temList.push(n.willpowerId))
+        editList.map((n: MimicryInfo)=>temList.push(n.mimicryId))
         WillpowerAPI.deleteWillpowerInfo({willpowerIds:temList}).then(request=>{
           if(request.code === 200){
             ElMessage.success(request.message)
@@ -89,8 +89,8 @@ const deletes = () => {
 
 }
 
-const view = (row: WillpowerInfo) =>{
-  rowDataId.value = row.willpowerId
+const view = (row: MimicryInfo) =>{
+  rowDataId.value = row.mimicryId
   dialogName.value = "Willpower Info - VIEW"
   isEdit.value = 'view'
   dialogFormVisible.value = true
@@ -101,9 +101,8 @@ const saveFormData=()=>{
   willpowerFormModalRef.value.save()
 }
 
-
 watch(
-    () => willpowerQueryParams.value.page,
+    () => mimicryQueryParams.value.page,
     async () => {
       queryList()
     },
@@ -121,7 +120,7 @@ watch(
     </el-button>
 
     <el-input
-        v-model="willpowerQueryParams.search_name"
+        v-model="mimicryQueryParams.search_name"
         style="width: 200px;margin-left: 10px; margin-right: auto;"
         placeholder="搜索名称"
     >
@@ -146,21 +145,12 @@ watch(
 
   <el-table ref="formRef" :data="tableData" style="width: 100%; height: 100%;" size="large" v-loading="loading" @row-dblclick="view">
     <el-table-column type="selection"  width="55"/>
-    <el-table-column fixed prop="willpowerName" label="意志名称" width="150"/>
-    <el-table-column prop="willpowerId" label="意志ID" width="120"/>
-    <el-table-column prop="willpowerThumbnailUrl" label="意志缩略图" width="120">
-      <template #default="scope">
-        <el-image  preview-teleported :src="scope.row.willpowerThumbnailUrl">
-          <template #error>
-            <div class="image-slot">
-              <el-image preview-teleported src="src/assets/img/zwtp.jpg"/>
-            </div>
-          </template>
-        </el-image>
-      </template>
-    </el-table-column>
-    <el-table-column prop="willpowerDescription" label="意志描述" min-width="300"/>
-  </el-table>
+    <el-table-column fixed prop="mimicryName" label="拟态名称" />
+    <el-table-column prop="mimicryId" label="拟态ID" />
+    <el-table-column prop="mimicrySex" label="拟态性别" />
+    <el-table-column prop="mimicryFactions" label="拟态所属" />
+    <el-table-column prop="mimicryBirthday" label="拟态生日" />
+</el-table>
 
   <div style="display: flex; justify-content: flex-end; padding: 20px 0 0;">
     <el-pagination
@@ -168,12 +158,12 @@ watch(
         background
         layout="prev, pager, next"
         :total="formTotal"
-        v-model:current-page="willpowerQueryParams.page"
+        v-model:current-page="mimicryQueryParams.page"
     />
   </div>
 
   <el-dialog v-model="dialogFormVisible" :title="dialogName" width="1200"  draggable  align-center destroy-on-close :close-on-click-modal="false">
-    <WillpowerFormModal :form-data-id="rowDataId" :is-edit="isEdit" ref="willpowerFormModalRef" @save="queryList"/>
+    <MimicryFormModal :form-data-id="rowDataId" :is-edit="isEdit" ref="willpowerFormModalRef" @save="queryList"/>
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>

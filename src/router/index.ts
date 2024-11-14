@@ -229,7 +229,7 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     title: '武器图鉴',
                     permiss: '29',
-                    icon: 'Tickets'
+                    icon: 'CopyDocument'
                 },
                 component: () => import('@/views/hotta/IllustratedArms/index.vue'),
             },
@@ -239,9 +239,19 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     title: '意志图鉴',
                     permiss: '30',
-                    icon: 'Memo'
+                    icon: 'FullScreen'
                 },
                 component: () => import('@/views/hotta/IllustratedWillpower/index.vue'),
+            },
+            {
+                path: '/IllustratedMimicry',
+                name: 'IllustratedMimicry',
+                meta: {
+                    title: '拟态图鉴',
+                    permiss: '30',
+                    icon: 'Star'
+                },
+                component: () => import('@/views/hotta/IllustratedMimicry/index.vue'),
             }
         ],
     },

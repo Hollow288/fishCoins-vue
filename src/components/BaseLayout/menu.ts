@@ -45,14 +45,21 @@ export const menuData: Menus[] = [
                 pid: '8',
                 index: '/IllustratedArms',
                 title: '武器图鉴',
-                icon: 'Tickets'
+                icon: 'CopyDocument'
             },
             {
                 id: '82',
                 pid: '8',
                 index: '/IllustratedWillpower',
                 title: '意志图鉴',
-                icon: 'Memo'
+                icon: 'FullScreen'
+            },
+            {
+                id: '83',
+                pid: '8',
+                index: '/IllustratedMimicry',
+                title: '拟态图鉴',
+                icon: 'Star'
             }
         ],
     },

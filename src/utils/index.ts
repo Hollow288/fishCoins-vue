@@ -17,3 +17,8 @@ export const mix = (color1: string, color2: string, weight: number = 0.5): strin
 export const isEmpty = (obj:any) =>{
     return typeof obj == 'undefined' || obj == null || obj == '';
 }
+
+
+export const generateKey = () => {
+    return Math.floor(Math.random() * 1000000000); // 生成一个 0 到 10 亿之间的随机数字
+}
