@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import {reactive, ref, watch} from "vue";
-import {ElMessage, FormInstance, FormRules, UploadProps} from "element-plus";
+import {ElMessage, FormInstance, FormRules} from "element-plus";
 import {
   ArmsIdName,
   ArmsMimicryWillpower,
@@ -9,7 +9,6 @@ import {
   MimicryIdName,
   WillpowerIdName
 } from '@/types/hotta/arms/basic-info'
-import {WillpowerAPI} from "@/api/hotta/willpower";
 
 const formRef = ref<FormInstance | null>(null);
 

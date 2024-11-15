@@ -91,7 +91,7 @@ const deletes = () => {
 
 const view = (row: MimicryInfo) =>{
   rowDataId.value = row.mimicryId
-  dialogName.value = "Willpower Info - VIEW"
+  dialogName.value = "Mimicry Info - VIEW"
   isEdit.value = 'view'
   dialogFormVisible.value = true
 }
