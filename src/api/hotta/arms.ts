@@ -1,8 +1,7 @@
 import {GlobalEnvConfig} from "@/constants/environments";
 import {httpRequest} from "@/api/axios";
 import {BaseResponse, PageResponse} from "@/types/axios";
-import {UserTokenResponse} from "@/types/auth";
-import type {ItemsBasic,ArmsInfo } from '@/types/hotta/arms/basic-info'
+import {ArmsInfo, ArmsMimicryWillpower, ArmsMimicryWillpowerResponse} from '@/types/hotta/arms/basic-info'
 import {ArmsPage} from "@/types/hotta/arms/basic-info";
 
 export class ArmsAPI {
@@ -38,6 +37,22 @@ export class ArmsAPI {
 
     static selectIdArmsInfo(params:number) {
         return httpRequest.get<BaseResponse<ArmsInfo>>(`${this.ARMS_API_PREFIX}/id-arms/${params}`,)
+    }
+
+
+    static selectArmsMimicryWillpower() {
+        return httpRequest.get<BaseResponse<ArmsMimicryWillpowerResponse>>(`${this.ARMS_API_PREFIX}/arms-mimicry-willpower`,)
+    }
+
+    static selectArmsMimicryWillpowerBindInfo(armsIds:number) {
+        return httpRequest.get<BaseResponse<ArmsMimicryWillpower>>(`${this.ARMS_API_PREFIX}/bind/${armsIds}/arms-mimicry-willpower`,)
+    }
+
+
+    static editArmsMimicryWillpower(data: object) {
+        return httpRequest.put<BaseResponse<ArmsMimicryWillpower>>(`${this.ARMS_API_PREFIX}/edit-arms-mimicry-willpower`, {
+            ...data
+        })
     }
 
 }

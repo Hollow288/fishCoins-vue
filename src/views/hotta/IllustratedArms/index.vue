@@ -69,9 +69,9 @@
         </el-table-column>
         <el-table-column prop="armsDescription" label="武器描述" min-width="300"/>
         <el-table-column fixed="right" label="绑定" width="155" header-align="center">
-            <template #default>
+            <template #default="scope">
               <div style="display: flex;align-items: center;justify-content: center;">
-                <el-button link  size="default" @click="handleClick">意志&拟态</el-button>
+                <el-button link  size="default" @click="handleClick(scope.row.armsId,scope.row.armsName)">意志&拟态</el-button>
               </div>
             </template>
         </el-table-column>
@@ -99,11 +99,24 @@
         </template>
     </el-dialog>
 
+
+    <el-dialog v-model="dialogFormVisibleBind" title="绑定" width="1000"  draggable  align-center destroy-on-close :close-on-click-modal="false">
+      <BindFormModal :form-data-id="rowBindDataId" :form-data-name="rowBindDataName"  ref="bindFormModalRef"  @save="dialogFormVisibleBind = false"/>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="dialogFormVisibleBind = false">取消</el-button>
+          <el-button type="primary" @click="saveBindFormData" >
+            保存
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
+
 </template>
 
 <script lang="ts" setup>
 import {Delete, Edit, Plus, RefreshRight} from "@element-plus/icons-vue";
-import {ArmsFormModal} from './components'
+import {ArmsFormModal, BindFormModal} from './components'
 import {reactive, ref, watch} from "vue";
 import {ArmsPage, weaponAttributes, weaponType} from '@/types/hotta/arms/basic-info'
 import {ElMessage} from "element-plus";
@@ -111,11 +124,15 @@ import {ArmsAPI} from "@/api/hotta/arms";
 import type {ArmsInfo } from '@/types/hotta/arms/basic-info'
 
 const dialogFormVisible = ref(false)
+const dialogFormVisibleBind = ref(false)
 
 const armsFormModalRef = ref()
+const bindFormModalRef = ref()
 const formRef = ref()
 
 const rowDataId = ref(null)
+const rowBindDataId = ref(null)
+const rowBindDataName = ref('')
 const isEdit = ref('')
 const value = ref<string[]>([])
 let tableData = reactive<ArmsInfo[]>([])
@@ -124,8 +141,10 @@ const formTotal = ref<number>(0)
 const loading = ref(false)
 const dialogName =ref('')
 
-const handleClick = () => {
-    console.log('click')
+const handleClick = (armsId:number,armsName:string) => {
+  rowBindDataId.value = armsId
+  rowBindDataName.value = armsName
+  dialogFormVisibleBind.value = true
 }
 
 const queryList = ()=>{
@@ -215,6 +234,10 @@ const view = (row: ArmsInfo) =>{
 
 const saveFormData=()=>{
     armsFormModalRef.value.save()
+}
+
+const saveBindFormData=()=>{
+    bindFormModalRef.value.save()
 }
 
 watch(

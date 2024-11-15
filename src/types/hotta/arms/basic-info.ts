@@ -70,39 +70,67 @@ export const weaponType = [
 
 
 export interface ItemsBasic {
-    itemsId: string
-    itemsName: string,
+    itemsId: string;
+    itemsName: string;
     itemsDescribe: string
 }
 
 export interface ArmsInfo {
-    armsId: string,
-    armsName: string,
-    armsRarity: string,
-    armsType: string,
-    armsAttribute: string,
-    armsThumbnailUrl: string,
-    armsOverwhelmed: number,
-    armsChargingEnergy: number,
-    armsDescription:string,
-    armsAggressivityStart: number,
-    armsBloodVolumeStart: number,
-    armsDefenseCapabilityStart: number,
-    armsCriticalStrikeStart: number,
-    armsAggressivityEnd: number,
-    armsBloodVolumeEnd: number,
-    armsDefenseCapabilityEnd: number,
-    armsCriticalStrikeEnd: number,
-    armsCharacteristics: ItemsBasic[],
-    armsExclusives: ItemsBasic[],
-    armsStarRatings: ItemsBasic[],
-    armsPrimaryAttacks: ItemsBasic[],
-    armsDodgeAttacks: ItemsBasic[],
-    armsSkillAttacks: ItemsBasic[],
-    armsCooperationAttacks: ItemsBasic[]
+    armsId: string;
+    armsName: string;
+    armsRarity: string;
+    armsType: string;
+    armsAttribute: string;
+    armsThumbnailUrl: string;
+    armsOverwhelmed: number;
+    armsChargingEnergy: number;
+    armsDescription:string;
+    armsAggressivityStart: number;
+    armsBloodVolumeStart: number;
+    armsDefenseCapabilityStart: number;
+    armsCriticalStrikeStart: number;
+    armsAggressivityEnd: number;
+    armsBloodVolumeEnd: number;
+    armsDefenseCapabilityEnd: number;
+    armsCriticalStrikeEnd: number;
+    armsCharacteristics: ItemsBasic[];
+    armsExclusives: ItemsBasic[];
+    armsStarRatings: ItemsBasic[];
+    armsPrimaryAttacks: ItemsBasic[];
+    armsDodgeAttacks: ItemsBasic[];
+    armsSkillAttacks: ItemsBasic[];
+    armsCooperationAttacks: ItemsBasic[];
 }
 
 
 export interface ArmsPage extends BasePageModel{
-    attribute_type: string
+    attribute_type: string;
+}
+
+export interface ArmsIdName{
+    armsId: number;
+    armsName: string;
+}
+
+export interface MimicryIdName{
+    mimicryId: number;
+    mimicryName: string;
+}
+
+export interface WillpowerIdName{
+    willpowerId: number;
+    willpowerName: string;
+}
+
+export interface ArmsMimicryWillpower {
+    armsId: number;
+    mimicryId: number;
+    willpowerId: number;
+}
+
+
+export interface ArmsMimicryWillpowerResponse{
+    armsIdNames: ArmsIdName[];
+    mimicryIdNames: MimicryIdName[];
+    willpowerIdNames: WillpowerIdName[];
 }
