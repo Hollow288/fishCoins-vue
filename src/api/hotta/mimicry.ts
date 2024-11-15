@@ -20,13 +20,13 @@ export class MimicryAPI {
         })
     }
 
-    // static deleteWillpowerInfo(data: object) {
-    //     return httpRequest.put<BaseResponse<WillpowerInfo>>(`${this.WILLPOWER_API_PREFIX}/delete-willpower`, {
-    //         ...data
-    //     })
-    // }
-    //
-    //
+    static deleteMimicryInfo(data: object) {
+        return httpRequest.put<BaseResponse<MimicryInfo>>(`${this.MIMICRY_API_PREFIX}/delete-mimicry`, {
+            ...data
+        })
+    }
+
+
     static editMimicryInfo(data: object) {
         return httpRequest.put<BaseResponse<MimicryInfo>>(`${this.MIMICRY_API_PREFIX}/edit-mimicry`, {
             ...data

@@ -105,7 +105,6 @@ onBeforeMount(() => checkLogin());
 }
 
 .main {
-    //overflow-y: auto;
     height: calc(100vh - 140px);
     scrollbar-width: none;
     background-color: #ffffff;
@@ -113,9 +112,7 @@ onBeforeMount(() => checkLogin());
 }
 
 
-/* 设置滚动条的宽度和颜色 */
 .main::-webkit-scrollbar {
-    //width: 8px; /* 宽度 */
     display: none;
 }
 

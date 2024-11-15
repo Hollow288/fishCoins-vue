@@ -69,7 +69,7 @@ const deletes = () => {
       .then(() => {
         let temList = []
         editList.map((n: MimicryInfo)=>temList.push(n.mimicryId))
-        WillpowerAPI.deleteWillpowerInfo({willpowerIds:temList}).then(request=>{
+        MimicryAPI.deleteMimicryInfo({mimicryIds:temList}).then(request=>{
           if(request.code === 200){
             ElMessage.success(request.message)
             queryList()

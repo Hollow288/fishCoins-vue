@@ -2,9 +2,7 @@
 
 import {Delete, Plus} from "@element-plus/icons-vue";
 import {nextTick, reactive, ref, watch} from "vue";
-import {ElMessage, FormInstance, FormRules, InputInstance, UploadProps} from "element-plus";
-import {v4 as uuidv4} from 'uuid';
-import {WillpowerAPI} from "@/api/hotta/willpower";
+import {ElMessage, FormInstance, FormRules, InputInstance} from "element-plus";
 import {MimicryFavors, MimicryInfo} from "@/types/hotta/mimicry/basic-info";
 import {generateKey} from "@/utils";
 import {MimicryAPI} from "@/api/hotta/mimicry";
@@ -143,9 +141,9 @@ watch(
     async (newValue) => {
         if(newValue.formDataId  && newValue.isEdit != 'add' ){
           const request = await MimicryAPI.selectIdMimicryInfo(newValue.formDataId);
-          debugger
-          //Todo ?
-          dynamicTags.value = request.data.mimicryLike.split(',')
+          if(request.data.mimicryLike){
+            dynamicTags.value = request.data.mimicryLike.split(',')
+          }
           formData.value = request.data
         }
     },
