@@ -60,6 +60,13 @@ export const menuData: Menus[] = [
                 index: '/IllustratedMimicry',
                 title: '拟态图鉴',
                 icon: 'Star'
+            },
+            {
+                id: '84',
+                pid: '8',
+                index: '/YuCoins',
+                title: '域币任务',
+                icon: 'PieChart'
             }
         ],
     },

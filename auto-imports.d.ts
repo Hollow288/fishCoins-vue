@@ -7,6 +7,7 @@ declare global {
   const MimicryAPI: typeof import('./src/api/hotta/mimicry')['MimicryAPI']
   const UploadAPI: typeof import('./src/api/upload')['UploadAPI']
   const WillpowerAPI: typeof import('./src/api/hotta/willpower')['WillpowerAPI']
+  const YuCoinsAPI: typeof import('./src/api/hotta/yu-coins')['YuCoinsAPI']
   const china: typeof import('./src/utils/china')['default']
   const generateKey: typeof import('./src/utils/index')['generateKey']
   const httpRequest: typeof import('./src/api/axios')['httpRequest']

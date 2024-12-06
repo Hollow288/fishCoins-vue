@@ -252,6 +252,16 @@ const routes: RouteRecordRaw[] = [
                     icon: 'Star'
                 },
                 component: () => import('@/views/hotta/IllustratedMimicry/index.vue'),
+            },
+            {
+                path: '/YuCoins',
+                name: 'YuCoins',
+                meta: {
+                    title: '域币任务',
+                    permiss: '30',
+                    icon: 'PieChart'
+                },
+                component: () => import('@/views/hotta/YuCoins/index.vue'),
             }
         ],
     },
