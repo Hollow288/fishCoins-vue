@@ -13,9 +13,9 @@ export interface YuCoinsTaskType {
 
 export interface YuCoinsTaskWeekly {
     taskWeeklyId: string
-    taskTypeIds: string,
     taskWeeklyDate: string,
     delFlag: string
+    weeklyDetailIds: string[]
 }
 
 

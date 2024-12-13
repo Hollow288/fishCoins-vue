@@ -24,7 +24,7 @@ const props = defineProps({
 
 const formData = ref<YuCoinsTaskWeekly>({
   taskWeeklyId: '',
-  taskTypeIds: '',
+  weeklyDetailIds: [],
   taskWeeklyDate: '',
   delFlag: null
 })
@@ -48,7 +48,7 @@ const save = async () => {
     await formRef.value.validate(async (valid, fields) => {
         if (valid) {
             if(props.isEdit == 'add' || props.isEdit == 'edit'){
-                formData.value.taskTypeIds = resultTypeList.value.join(',')
+                formData.value.weeklyDetailIds = resultTypeList.value
                 const {code, data, message} = await YuCoinsAPI.addEditYuCoinsWeeklyInfo(formData.value)
                 if (code === 200) {
                   formData.value.taskWeeklyId = data.taskWeeklyId
@@ -77,8 +77,8 @@ watch(
           const request = await YuCoinsAPI.selectIdYuCoinsWeeklyInfo(newValue.formDataId);
 
           formData.value = request.data
-          if(request.data.taskTypeIds){
-            resultTypeList.value = request.data.taskTypeIds.split(',').map(n=>Number(n))
+          if(request.data.weeklyDetailIds){
+            resultTypeList.value = request.data.weeklyDetailIds.map(n=>Number(n))
           }
         }
         const requestTypeData = await YuCoinsAPI.selectYuCoinsTaskTypeInfo()

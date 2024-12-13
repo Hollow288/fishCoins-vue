@@ -146,7 +146,6 @@ watch(
   <el-table ref="formRef" :data="tableData" style="width: 100%; height: 100%;" size="large" v-loading="loading" @row-dblclick="view">
     <el-table-column type="selection"  width="55"/>
     <el-table-column fixed prop="taskWeeklyId" label="任务ID" />
-    <el-table-column prop="taskTypeIds" label="每周任务IDS" />
     <el-table-column
         prop="taskWeeklyDate"
         label="发布时间"
