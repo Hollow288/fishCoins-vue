@@ -67,6 +67,13 @@ export const menuData: Menus[] = [
                 index: '/YuCoins',
                 title: '域币任务',
                 icon: 'PieChart'
+            },
+            {
+                id: '85',
+                pid: '8',
+                index: '/NuoCoins',
+                title: '诺元任务',
+                icon: 'Clock'
             }
         ],
     },

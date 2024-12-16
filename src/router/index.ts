@@ -262,6 +262,16 @@ const routes: RouteRecordRaw[] = [
                     icon: 'PieChart'
                 },
                 component: () => import('@/views/hotta/YuCoins/index.vue'),
+            },
+            {
+                path: '/NuoCoins',
+                name: 'NuoCoins',
+                meta: {
+                    title: '诺元任务',
+                    permiss: '30',
+                    icon: 'Clock'
+                },
+                component: () => import('@/views/hotta/NuoCoins/index.vue'),
             }
         ],
     },

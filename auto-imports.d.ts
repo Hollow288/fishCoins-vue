@@ -5,6 +5,7 @@ declare global {
   const AuthAPI: typeof import('./src/api/auth')['AuthAPI']
   const AuthUtils: typeof import('./src/utils/auth')['AuthUtils']
   const MimicryAPI: typeof import('./src/api/hotta/mimicry')['MimicryAPI']
+  const NuoCoinsAPI: typeof import('./src/api/hotta/nuo-coins')['NuoCoinsAPI']
   const UploadAPI: typeof import('./src/api/upload')['UploadAPI']
   const WillpowerAPI: typeof import('./src/api/hotta/willpower')['WillpowerAPI']
   const YuCoinsAPI: typeof import('./src/api/hotta/yu-coins')['YuCoinsAPI']

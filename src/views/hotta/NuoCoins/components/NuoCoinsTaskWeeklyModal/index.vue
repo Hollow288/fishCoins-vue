@@ -2,10 +2,10 @@
 
 import {nextTick, reactive, ref, watch} from "vue";
 import {ElMessage, FormInstance, FormRules, InputInstance} from "element-plus";
-import {YuCoinsAPI} from "@/api/hotta/yu-coins";
-import {YuCoinsTaskType, YuCoinsTaskWeekly} from "@/types/hotta/yu-coins/basic-info";
+import {NuoCoinsAPI} from "@/api/hotta/nuo-coins";
+import {NuoCoinsTaskType, NuoCoinsTaskWeekly} from "@/types/hotta/nuo-coins/basic-info";
 
-const typeList = ref<YuCoinsTaskType[]>([])
+const typeList = ref<NuoCoinsTaskType[]>([])
 const formRef = ref<FormInstance | null>(null);
 const resultTypeList = ref([])
 
@@ -22,7 +22,7 @@ const props = defineProps({
 
 
 
-const formData = ref<YuCoinsTaskWeekly>({
+const formData = ref<NuoCoinsTaskWeekly>({
   taskWeeklyId: '',
   weeklyDetailIds: [],
   taskWeeklyDate: '',
@@ -30,7 +30,7 @@ const formData = ref<YuCoinsTaskWeekly>({
 })
 
 
-const rules = reactive<FormRules<YuCoinsTaskWeekly>>({
+const rules = reactive<FormRules<NuoCoinsTaskWeekly>>({
   taskWeeklyDate: [
         { required: true, message: '请输入发布日期', trigger: 'blur' },
     ]
@@ -49,7 +49,7 @@ const save = async () => {
         if (valid) {
             if(props.isEdit == 'add' || props.isEdit == 'edit'){
                 formData.value.weeklyDetailIds = resultTypeList.value
-                const {code, data, message} = await YuCoinsAPI.addEditYuCoinsWeeklyInfo(formData.value)
+                const {code, data, message} = await NuoCoinsAPI.addEditNuoCoinsWeeklyInfo(formData.value)
                 if (code === 200) {
                   formData.value.taskWeeklyId = data.taskWeeklyId
                   ElMessage.success('保存成功')
@@ -74,14 +74,14 @@ watch(
     () => props,
     async (newValue) => {
         if(newValue.formDataId  && newValue.isEdit != 'add'  ){
-          const request = await YuCoinsAPI.selectIdYuCoinsWeeklyInfo(newValue.formDataId);
+          const request = await NuoCoinsAPI.selectIdNuoCoinsWeeklyInfo(newValue.formDataId);
 
           formData.value = request.data
           if(request.data.weeklyDetailIds){
             resultTypeList.value = request.data.weeklyDetailIds.map(n=>Number(n))
           }
         }
-        const requestTypeData = await YuCoinsAPI.selectYuCoinsTaskTypeInfo()
+        const requestTypeData = await NuoCoinsAPI.selectNuoCoinsTaskTypeInfo()
         typeList.value = requestTypeData.data
     },
     {immediate: true, deep: true}
@@ -122,7 +122,7 @@ defineExpose({
                         font-size: 13px;
                       "
                   >
-                      地区: {{item.taskTypeRegion}} & NPC: {{ item.taskTypeNpc }}
+                      地区: {{item.taskTypeRegion}}   & NPC: {{ item.taskTypeNpc }}
                     </span>
                 </el-option>
               </el-select>
