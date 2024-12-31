@@ -74,6 +74,13 @@ export const menuData: Menus[] = [
                 index: '/NuoCoins',
                 title: '诺元任务',
                 icon: 'Clock'
+            },
+            {
+                id: '86',
+                pid: '8',
+                index: '/EventConsultation',
+                title: '活动资讯',
+                icon: 'Bell'
             }
         ],
     },

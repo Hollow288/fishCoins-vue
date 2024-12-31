@@ -25,4 +25,10 @@ export class UploadAPI {
       headers: this.headers
     })
   }
+
+  static uploadEventConsultationImgFile(data: any, consultationId: string) {
+    return httpRequest.post<BaseResponse<{ path: string }>>(`${this.UPLOAD_API_PREFIX}/${consultationId}/event-consultation-img`, data, {
+      headers: this.headers
+    })
+  }
 }

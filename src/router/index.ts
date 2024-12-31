@@ -272,6 +272,16 @@ const routes: RouteRecordRaw[] = [
                     icon: 'Clock'
                 },
                 component: () => import('@/views/hotta/NuoCoins/index.vue'),
+            },
+            {
+                path: '/EventConsultation',
+                name: 'EventConsultation',
+                meta: {
+                    title: '活动资讯',
+                    permiss: '30',
+                    icon: 'Bell'
+                },
+                component: () => import('@/views/hotta/EventConsultation/index.vue'),
             }
         ],
     },
