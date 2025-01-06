@@ -134,7 +134,7 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
     if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png' && rawFile.type !== 'image/webp') {
         ElMessage.error('Avatar picture must be JPG format!')
         return false
-    } else if (rawFile.size / 1024 / 1024 > 2) {
+    } else if (rawFile.size / 1024 / 1024 > 5) {
         ElMessage.error('Avatar picture size can not exceed 2MB!')
         return false
     }
