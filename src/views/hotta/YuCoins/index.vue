@@ -3,11 +3,12 @@
 import {Delete, Edit, Plus, RefreshRight} from "@element-plus/icons-vue";
 import {YuCoinsTaskWeeklyModal} from './components'
 import {onMounted, reactive, ref, watch} from "vue";
-const dialogFormVisible = ref(false)
+
 import {Action, ElMessage, ElMessageBox} from "element-plus";
 import {YuCoinsAPI} from "@/api/hotta/yu-coins";
 import {YuCoinsTaskWeekly} from "@/types/hotta/yu-coins/basic-info";
 import {BasePageModel} from "@/types/common/page";
+const dialogFormVisible = ref(false)
 const yuCoinsQueryParams = ref<BasePageModel>({page:1,page_size:10})
 let tableData = reactive<YuCoinsTaskWeekly[]>([])
 const formTotal = ref<number>(0)

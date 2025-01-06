@@ -79,7 +79,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
             ElMessage.success('注册成功，请登录');
             router.push('/login');
         } else {
-            return false;
+            // return false;
         }
     });
 };
@@ -92,7 +92,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
     justify-content: center;
     width: 100%;
     height: 100vh;
-    //background: url(../../assets/img/login-bg.jpg) center/cover no-repeat;
     background: #e3e3e3;
 }
 

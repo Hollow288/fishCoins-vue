@@ -3,11 +3,12 @@
 import {Delete, Edit, Plus, RefreshRight} from "@element-plus/icons-vue";
 import {EventConsultationFormModal} from './components'
 import {onMounted, reactive, ref, watch} from "vue";
-const dialogFormVisible = ref(false)
+
 import {EventConsultationInfo, EventConsultationPage} from "@/types/hotta/event-consultation/basic-info";
 import {EventConsultationAPI} from "@/api/hotta/event-consultation";
 import {Action, ElMessage, ElMessageBox} from "element-plus";
 import {Search } from '@element-plus/icons-vue'
+const dialogFormVisible = ref(false)
 const eventConsultationQueryParams = ref<EventConsultationPage>({page:1,page_size:10,search_name:''})
 let tableData = reactive<EventConsultationInfo[]>([])
 const formTotal = ref<number>(0)

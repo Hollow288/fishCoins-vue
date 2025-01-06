@@ -46,7 +46,7 @@
 import { ref, reactive } from 'vue';
 import { ElMessage, } from 'element-plus';
 import { CirclePlusFilled } from '@element-plus/icons-vue';
-import { fetchData } from '@/api/index';
+// import { fetchData } from '@/api/index';
 import TableCustom from '@/components/table-custom.vue';
 import TableDetail from '@/components/table-detail.vue';
 import TableSearch from '@/components/table-search.vue';
@@ -81,8 +81,8 @@ const page = reactive({
 })
 const tableData = ref<TableItem[]>([]);
 const getData = async () => {
-	const res = await fetchData()
-	tableData.value = res.data.list;
+	// const res = await fetchData()
+	// tableData.value = res.data.list;
 };
 getData();
 

@@ -3,11 +3,12 @@
 import {Delete, Edit, Plus, RefreshRight} from "@element-plus/icons-vue";
 import {NuoCoinsTaskWeeklyModal} from './components'
 import {onMounted, reactive, ref, watch} from "vue";
-const dialogFormVisible = ref(false)
+
 import {Action, ElMessage, ElMessageBox} from "element-plus";
 import {NuoCoinsAPI} from "@/api/hotta/nuo-coins";
 import {NuoCoinsTaskWeekly} from "@/types/hotta/nuo-coins/basic-info";
 import {BasePageModel} from "@/types/common/page";
+const dialogFormVisible = ref(false)
 const nuoCoinsQueryParams = ref<BasePageModel>({page:1,page_size:10})
 let tableData = reactive<NuoCoinsTaskWeekly[]>([])
 const formTotal = ref<number>(0)

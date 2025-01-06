@@ -206,7 +206,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
             AuthAPI.login(param).then(res=>{
                 const { code, data, message } = res
                 const { access_token, refresh_token, user } = data ?? {}
-                if(code == '200'){
+                if(code == 200){
                     ElMessage.success(message);
                     AuthUtils.setAccessToken(access_token)
                     AuthUtils.setRefreshToken(refresh_token)
@@ -231,7 +231,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
 
         } else {
             ElMessage.warning('请填写完整信息');
-            return false;
         }
     });
 
@@ -250,7 +249,6 @@ tabs.clearTabs();
     justify-content: center;
     width: 100%;
     height: 100vh;
-    //background: url(../../assets/img/login-bg.jpg) center/cover no-repeat;
     background: #e3e3e3;
 }
 

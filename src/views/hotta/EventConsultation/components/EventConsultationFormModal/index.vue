@@ -38,8 +38,8 @@ const formData = ref<EventConsultationInfo>({
 
 
 const rules = reactive<FormRules<EventConsultationInfo>>({
-  consultationName: [
-    {required: true, message: '请输入名称', trigger: 'blur'},
+  consultationTitle: [
+    {required: true, message: '请输入活动标题', trigger: 'blur'},
   ]
 })
 

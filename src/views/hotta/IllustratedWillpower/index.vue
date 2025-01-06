@@ -3,11 +3,11 @@
 import {Delete, Edit, Plus, RefreshRight} from "@element-plus/icons-vue";
 import {WillpowerFormModal} from './components'
 import {onMounted, reactive, ref, watch} from "vue";
-const dialogFormVisible = ref(false)
 import {WillpowerInfo, WillpowerPage} from "@/types/hotta/willpower/basic-info";
 import {WillpowerAPI} from "@/api/hotta/willpower";
 import {Action, ElMessage, ElMessageBox} from "element-plus";
 import {Search } from '@element-plus/icons-vue'
+const dialogFormVisible = ref(false)
 const willpowerQueryParams = ref<WillpowerPage>({page:1,page_size:10,search_name:''})
 let tableData = reactive<WillpowerInfo[]>([])
 const formTotal = ref<number>(0)

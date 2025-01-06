@@ -46,7 +46,7 @@
 import { ref } from 'vue';
 import { Delete, Edit, CloseBold, Select } from '@element-plus/icons-vue';
 import TableCustom from '@/components/table-custom.vue';
-import { fetchUserData } from '@/api/index';
+// import { fetchUserData } from '@/api/index';
 
 let columns = ref([
 	{ type: 'index', label: '序号', width: 55, align: 'center' },
@@ -58,8 +58,8 @@ let columns = ref([
 ])
 const tableData = ref([]);
 const getData = async () => {
-	const res = await fetchUserData();
-	tableData.value = res.data.list;
+	// const res = await fetchUserData();
+	// tableData.value = res.data.list;
 };
 getData();
 

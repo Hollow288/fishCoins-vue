@@ -39,7 +39,7 @@
 import { ref, reactive } from 'vue';
 import { ElMessage } from 'element-plus';
 import { Role } from '@/types/role';
-import { fetchRoleData } from '@/api';
+// import { fetchRoleData } from '@/api';
 import TableCustom from '@/components/table-custom.vue';
 import TableDetail from '@/components/table-detail.vue';
 import RolePermission from './role-permission.vue'
@@ -73,9 +73,9 @@ const page = reactive({
 })
 const tableData = ref<Role[]>([]);
 const getData = async () => {
-    const res = await fetchRoleData()
-    tableData.value = res.data.list;
-    page.total = res.data.pageTotal;
+    // const res = await fetchRoleData()
+    // tableData.value = res.data.list;
+    // page.total = res.data.pageTotal;
 };
 getData();
 const changePage = (val: number) => {

@@ -3,11 +3,11 @@
 import {Delete, Edit, Plus, RefreshRight} from "@element-plus/icons-vue";
 import {MimicryFormModal} from './components'
 import {onMounted, reactive, ref, watch} from "vue";
-const dialogFormVisible = ref(false)
 import {MimicryInfo, MimicryPage} from "@/types/hotta/mimicry/basic-info";
 import {MimicryAPI} from "@/api/hotta/mimicry";
 import {Action, ElMessage, ElMessageBox} from "element-plus";
 import {Search } from '@element-plus/icons-vue'
+const dialogFormVisible = ref(false)
 const mimicryQueryParams = ref<MimicryPage>({page:1,page_size:10,search_name:''})
 let tableData = reactive<MimicryInfo[]>([])
 const formTotal = ref<number>(0)

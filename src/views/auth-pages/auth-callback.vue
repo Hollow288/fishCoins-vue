@@ -62,7 +62,7 @@ onMounted(() => {
             AuthAPI.login(param).then(res=>{
                 const { code, data, message } = res
                 const { access_token, refresh_token, user } = data ?? {}
-                if(code == '200'){
+                if(code == 200){
                     loading.close()
                     ElMessage.success(message);
                     AuthUtils.setAccessToken(access_token)
