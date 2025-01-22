@@ -31,4 +31,10 @@ export class UploadAPI {
       headers: this.headers
     })
   }
+
+  static uploadFoodImgFile(data: any, foodId: string) {
+    return httpRequest.post<BaseResponse<{ path: string }>>(`${this.UPLOAD_API_PREFIX}/${foodId}/food-img`, data, {
+      headers: this.headers
+    })
+  }
 }

@@ -282,6 +282,16 @@ const routes: RouteRecordRaw[] = [
                     icon: 'Bell'
                 },
                 component: () => import('@/views/hotta/EventConsultation/index.vue'),
+            },
+            {
+                path: '/Food',
+                name: 'Food',
+                meta: {
+                    title: '食物图鉴',
+                    permiss: '30',
+                    icon: 'Food'
+                },
+                component: () => import('@/views/hotta/Food/index.vue'),
             }
         ],
     },

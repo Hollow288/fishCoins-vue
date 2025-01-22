@@ -81,6 +81,13 @@ export const menuData: Menus[] = [
                 index: '/EventConsultation',
                 title: '活动资讯',
                 icon: 'Bell'
+            },
+            {
+                id: '87',
+                pid: '8',
+                index: '/Food',
+                title: '食物图鉴',
+                icon: 'Food'
             }
         ],
     },
