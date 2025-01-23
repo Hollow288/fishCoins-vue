@@ -8,7 +8,8 @@ export const GlobalEnvConfig = {
   BASE_API_URL: import.meta.env.VITE_BASE_API_URL ?? '',
   // MOCK_API_PREFIX: import.meta.env.VITE_MOCK_API_PREFIX ?? '',
   // MOCK_API_URL: import.meta.env.VITE_MOCK_API_URL ?? '',
-  GITHUB_CLIENT_ID: import.meta.env.VITE_GITHUB_CLIENT_ID ?? ''
+  GITHUB_CLIENT_ID: import.meta.env.VITE_GITHUB_CLIENT_ID ?? '',
+  SERVER_IP: import.meta.env.SERVER_IP ?? ''
   // GOOGLE_CLIENT_ID: import.meta.env.VITE_GOOGLE_CLIENT_ID ?? '',
   // MODE: import.meta.env.MODE,
   // IS_DEV: import.meta.env.DEV,
