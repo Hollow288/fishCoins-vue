@@ -1,5 +1,5 @@
 # 使用官方的 Node.js 镜像作为基础镜像
-FROM node:16-alpine
+FROM node:18 AS build
 
 # 定义构建时传入的参数
 ARG VITE_BASE_API_PREFIX
