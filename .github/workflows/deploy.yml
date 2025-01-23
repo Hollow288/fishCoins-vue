@@ -21,7 +21,12 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t hollow288/fish-coins-vue-docker:latest .  # 使用 Dockerfile 构建镜像
+          docker build \
+            --build-arg VITE_BASE_API_PREFIX=${{ secrets.VITE_BASE_API_PREFIX }} \
+            --build-arg VITE_BASE_API_URL=${{ secrets.VITE_BASE_API_URL }} \
+            --build-arg VITE_GITHUB_CLIENT_ID=${{ secrets.VITE_GITHUB_CLIENT_ID }} \
+            --build-arg SERVER_IP=${{ secrets.SERVER_IP }} \
+            -t hollow288/fish-coins-vue-docker:latest .
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
