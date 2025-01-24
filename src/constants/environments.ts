@@ -3,7 +3,7 @@
  */
 export const GlobalEnvConfig = {
   // PORT: import.meta.env.VITE_PORT ?? '',
-  // APP_BASE_URL: import.meta.env.VITE_APP_BASE_URL ?? '',
+  APP_BASE_URL: import.meta.env.VITE_APP_BASE_URL ?? '',
   BASE_API_PREFIX: import.meta.env.VITE_BASE_API_PREFIX ?? '',
   BASE_API_URL: import.meta.env.VITE_BASE_API_URL ?? '',
   // MOCK_API_PREFIX: import.meta.env.VITE_MOCK_API_PREFIX ?? '',

@@ -25,7 +25,7 @@ jobs:
             --build-arg VITE_BASE_API_PREFIX=${{ secrets.VITE_BASE_API_PREFIX }} \
             --build-arg VITE_BASE_API_URL=${{ secrets.VITE_BASE_API_URL }} \
             --build-arg VITE_GITHUB_CLIENT_ID=${{ secrets.VITE_GITHUB_CLIENT_ID }} \
-            --build-arg SERVER_IP=${{ secrets.SERVER_IP }} \
+            --build-arg VITE_APP_BASE_URL=${{ secrets.VITE_APP_BASE_URL }} \
             -t hollow288/fish-coins-vue-docker:latest .
 
       - name: Log in to Docker Hub

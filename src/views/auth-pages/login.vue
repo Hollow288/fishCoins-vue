@@ -173,8 +173,8 @@ const oauth2Login = () => {
     const basicGithubUrl = 'https://github.com/login/oauth/authorize'
 
     const clientId = GlobalEnvConfig.GITHUB_CLIENT_ID; // 替换为你的 GitHub 应用的 Client ID
-    const serverIp = GlobalEnvConfig.SERVER_IP;
-    const redirectUri = encodeURIComponent(`${serverIp}/auth-redirect?type=github`); // 替换为你的回调地址
+    const baseUrl = GlobalEnvConfig.APP_BASE_URL;
+    const redirectUri = encodeURIComponent(`${baseUrl}/auth-redirect?type=github`); // 替换为你的回调地址
     const state = Math.random().toString(36).substring(7); // 防止CSRF攻击，生成随机状态值
     sessionStorage.setItem('oauth_state', state);
     const githubUrl = `${basicGithubUrl}?client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`;
