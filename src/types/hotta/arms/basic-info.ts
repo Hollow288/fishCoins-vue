@@ -100,6 +100,7 @@ export interface ArmsInfo {
     armsDodgeAttacks: ItemsBasic[];
     armsSkillAttacks: ItemsBasic[];
     armsCooperationAttacks: ItemsBasic[];
+    armsSynesthesia: ItemsBasic[];
 }
 
 

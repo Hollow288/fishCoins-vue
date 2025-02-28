@@ -16,6 +16,7 @@ const armsPrimaryAttacks = ref()
 const armsDodgeAttacks = ref()
 const armsSkillAttacks = ref()
 const armsCooperationAttacks = ref()
+const armsSynesthesia = ref()
 const formRef = ref<FormInstance | null>(null);
 const fileListRef = ref([])
 // attach is edit ?
@@ -57,7 +58,8 @@ const formData = ref<ArmsInfo>({
     armsPrimaryAttacks: [],
     armsDodgeAttacks: [],
     armsSkillAttacks: [],
-    armsCooperationAttacks: []
+    armsCooperationAttacks: [],
+    armsSynesthesia: []
 })
 
 
@@ -107,6 +109,11 @@ const deleteArmsExclusives = () => {
 const deleteArmsStarRatings = () => {
     const selectedIds = armsStarRatings.value.getSelectionRows().map(row => row.itemsId);
     formData.value.armsStarRatings = formData.value.armsStarRatings.filter(item => !selectedIds.includes(item.itemsId));
+}
+
+const deleteArmsSynesthesia = () => {
+  const selectedIds = armsSynesthesia.value.getSelectionRows().map(row => row.itemsId);
+  formData.value.armsSynesthesia = formData.value.armsSynesthesia.filter(item => !selectedIds.includes(item.itemsId));
 }
 
 const deleteArmsPrimaryAttacks = () => {
@@ -234,6 +241,7 @@ watch(
             request.data.armsDodgeAttacks.map(n=>n.itemsId = uuidv4())
             request.data.armsSkillAttacks.map(n=>n.itemsId = uuidv4())
             request.data.armsCooperationAttacks.map(n=>n.itemsId = uuidv4())
+            request.data.armsSynesthesia.map(n=>n.itemsId = uuidv4())
 
             formData.value = request.data
         }
@@ -482,6 +490,33 @@ defineExpose({
                 </template>
             </el-table-column>
         </el-table>
+        <el-divider content-position="left">武器通感</el-divider>
+        <el-table ref="armsStarRatings" :data="formData.armsSynesthesia" style="width: 100%" max-height="300" :row-key="getRowKey">
+        <el-table-column type="selection"  width="55"/>
+        <el-table-column label="名称" width="300">
+          <template #default="scope">
+            <el-input v-model="scope.row.itemsName" placeholder="名称"/>
+          </template>
+        </el-table-column>
+        <el-table-column label="描述">
+          <template #header>
+            <div style="display: flex; align-items: center;">
+              <span style="margin-right: auto">描述</span>
+              <el-button text bg :icon="Plus" @click="addOneRow(formData.armsSynesthesia)">
+                新增
+              </el-button>
+              <el-button text bg :icon="Delete" @click="deleteArmsSynesthesia">
+                删除
+              </el-button>
+            </div>
+
+          </template>
+          <template #default="scope">
+            <el-input type="textarea" v-model="scope.row.itemsDescribe" placeholder="描述"
+                      autosize="autosize"/>
+          </template>
+        </el-table-column>
+      </el-table>
         <el-divider content-position="left">普通攻击</el-divider>
         <el-table ref="armsPrimaryAttacks" :data="formData.armsPrimaryAttacks" style="width: 100%" max-height="300" :row-key="getRowKey">
             <el-table-column type="selection" width="55"/>
