@@ -125,6 +125,7 @@ watch(
         v-model="foodQueryParams.search_name"
         style="width: 200px;margin-left: 10px; margin-right: auto;"
         placeholder="搜索名称"
+        @keyup.enter="queryList"
     >
       <template #suffix>
         <el-icon class="el-input__icon" style="cursor: pointer;" @click="queryList"><search/></el-icon>
