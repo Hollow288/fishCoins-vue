@@ -25,8 +25,8 @@ export interface PageResponse<T = any> extends Response {
 
 //token类
 export interface Token{
-  refresh_token : string
-  access_token : string
+  refreshToken : string
+  accessToken : string
 }
 
 // 排序枚举类型

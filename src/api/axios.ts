@@ -74,10 +74,10 @@ class Request {
               try {
                 const response = (await AuthAPI.refresh(currentRefreshToken)) ?? {}
                 // @ts-ignore
-                const { refresh_token, access_token} = response.data ?? {}
-                if(refresh_token && access_token){
-                  AuthUtils.setAccessToken(access_token)
-                  AuthUtils.setRefreshToken(refresh_token)
+                const { refreshToken, accessToken} = response.data ?? {}
+                if(refreshToken && accessToken){
+                  AuthUtils.setAccessToken(accessToken)
+                  AuthUtils.setRefreshToken(refreshToken)
                   this.isRefreshing = false
 
                   const originalRequest = res.config

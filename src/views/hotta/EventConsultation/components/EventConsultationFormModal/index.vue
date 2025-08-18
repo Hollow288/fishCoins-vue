@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {Delete, Plus} from "@element-plus/icons-vue";
+import {Plus} from "@element-plus/icons-vue";
 import {reactive, ref, watch} from "vue";
 import {ElMessage, FormInstance, FormRules, UploadProps} from "element-plus";
 import {UploadAPI} from "@/api/upload";
@@ -8,7 +8,6 @@ import {
   EventConsultationInfo
 } from "@/types/hotta/event-consultation/basic-info";
 import {EventConsultationAPI} from "@/api/hotta/event-consultation";
-import {YuCoinsAPI} from "@/api/hotta/yu-coins";
 
 
 const formRef = ref<FormInstance | null>(null);

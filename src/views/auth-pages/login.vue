@@ -8,8 +8,8 @@
             <el-form :model="param" :rules="rules" ref="login" size="large">
                 <el-tabs v-model="param.type" class="demo-tabs" @tab-click="handleClick" :stretch="true">
                     <el-tab-pane label="密码登录" name="password">
-                        <el-form-item prop="userName">
-                            <el-input v-model="param.userName" placeholder="用户名">
+                        <el-form-item prop="username">
+                            <el-input v-model="param.username" placeholder="用户名">
                                 <template #prepend>
                                     <el-icon>
                                         <User />
@@ -17,11 +17,11 @@
                                 </template>
                             </el-input>
                         </el-form-item>
-                        <el-form-item prop="passWord">
+                        <el-form-item prop="password">
                             <el-input
                                 type="password"
                                 placeholder="密码"
-                                v-model="param.passWord"
+                                v-model="param.password"
                                 @keyup.enter="submitForm(login)"
                                 show-password
                             >
@@ -112,8 +112,8 @@ import {GlobalEnvConfig} from "@/constants/environments";
 
 
 interface LoginInfo {
-    userName: string;
-    passWord: string;
+    username: string;
+    password: string;
     phone: string;
     code: string;
     type: string;
@@ -127,8 +127,8 @@ const redirectUrl = computed(() => route.query.redirect as string)
 
 const router = useRouter();
 const param = reactive<LoginInfo>({
-    userName: defParam ? defParam.userName : '',
-    passWord: defParam ? defParam.passWord : '',
+    username: defParam ? defParam.username : '',
+    password: defParam ? defParam.password : '',
     phone: '',
     code: '',
     type: 'password',
@@ -164,8 +164,8 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 
     if(tab.props.name==='code'){
         param.type = 'code'
-        param.userName = ''
-        param.passWord = ''
+        param.username = ''
+        param.password = ''
     }
 }
 
@@ -185,14 +185,14 @@ const oauth2Login = () => {
 }
 
 const rules: FormRules = {
-    userName: [
+    username: [
         {
             required: true,
             message: '请输入用户名',
             trigger: 'blur',
         },
     ],
-    passWord: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+    password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
 };
 const permiss = usePermissStore();
 const userStore = useUserStore()
@@ -203,14 +203,14 @@ const submitForm = (formEl: FormInstance | undefined) => {
     formEl.validate((valid: boolean) => {
         if (valid) {
 
-            // localStorage.setItem('vuems_name', param.userName);
+            // localStorage.setItem('vuems_name', param.username);
             AuthAPI.login(param).then(res=>{
                 const { code, data, message } = res
-                const { access_token, refresh_token, user } = data ?? {}
+                const { accessToken, refreshToken, user } = data ?? {}
                 if(code == 200){
                     ElMessage.success(message);
-                    AuthUtils.setAccessToken(access_token)
-                    AuthUtils.setRefreshToken(refresh_token)
+                    AuthUtils.setAccessToken(accessToken)
+                    AuthUtils.setRefreshToken(refreshToken)
                     userStore.setUser(user)
 
                     if (checked.value) {

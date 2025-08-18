@@ -7,15 +7,15 @@
 export class AuthUtils {
   /**
    * 访问令牌存储键名
-   * @default "access_token"
+   * @default "accessToken"
    */
-  private static ACCESS_TOKEN_KEY = 'access_token'
+  private static ACCESS_TOKEN_KEY = 'accessToken'
 
   /**
    * 刷新令牌存储键名
-   * @default "refresh_token"
+   * @default "refreshToken"
    */
-  private static REFRESH_TOKEN_KEY = 'refresh_token'
+  private static REFRESH_TOKEN_KEY = 'refreshToken'
 
   /**
    * 记住密码相关信息存储键名

@@ -1,8 +1,8 @@
 import type { User } from '@/types/user'
 
 export interface LoginModel {
-  userName: string
-  passWord: string
+  username: string
+  password: string
 }
 
 export interface SignupModel extends LoginModel {
@@ -10,8 +10,8 @@ export interface SignupModel extends LoginModel {
 }
 
 export interface TokenResponse {
-  access_token: string
-  refresh_token: string
+  accessToken: string
+  refreshToken: string
 }
 
 export interface UserTokenResponse extends TokenResponse {

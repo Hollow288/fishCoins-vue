@@ -16,8 +16,8 @@ import {computed} from 'vue';
 const router = useRouter()
 
 interface LoginInfo {
-    userName: string;
-    passWord: string;
+    username: string;
+    password: string;
     phone: string;
     code: string;
     type: string;
@@ -28,8 +28,8 @@ const route = useRoute()
 const redirectUrl = computed(() => route.query.redirect as string)
 
 const param = reactive<LoginInfo>({
-    userName:  '',
-    passWord:  '',
+    username:  '',
+    password:  '',
     phone: '',
     code: '',
     type: '',
@@ -61,12 +61,12 @@ onMounted(() => {
 
             AuthAPI.login(param).then(res=>{
                 const { code, data, message } = res
-                const { access_token, refresh_token, user } = data ?? {}
+                const { accessToken, refreshToken, user } = data ?? {}
                 if(code == 200){
                     loading.close()
                     ElMessage.success(message);
-                    AuthUtils.setAccessToken(access_token)
-                    AuthUtils.setRefreshToken(refresh_token)
+                    AuthUtils.setAccessToken(accessToken)
+                    AuthUtils.setRefreshToken(refreshToken)
                     userStore.setUser(user)
 
                     if (redirectUrl.value) {

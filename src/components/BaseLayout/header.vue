@@ -67,7 +67,7 @@ const userStore = useUserStore()
 
 
 // const username: string | null = localStorage.getItem('vuems_name');
-const username: string | null = userStore.getUser().userName
+const username: string | null = userStore.getUser().username
 const imgurl: string | '../assets/img/img.jpg' = userStore.getUser().avatarUrl
 const message: number = 2;
 

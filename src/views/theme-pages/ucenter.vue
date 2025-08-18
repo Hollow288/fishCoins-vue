@@ -7,7 +7,7 @@
                     <el-avatar class="user-avatar" :size="120" :src="user.avatarUrl" />
                 </div>
                 <div class="user-info">
-                    <div class="info-name">{{ user.userName }}</div>
+                    <div class="info-name">{{ user.username }}</div>
                     <div class="info-desc">
                         <el-divider direction="vertical" />
                         <span>{{ user.email }}</span>
@@ -57,9 +57,6 @@
                 :body-style="{ padding: '20px 50px', height: '100%', boxSizing: 'border-box' }"
             >
                 <el-tabs tab-position="left" v-model="activeName">
-                    <el-tab-pane name="label1" label="消息通知" class="user-tabpane">
-                        <TabsComp />
-                    </el-tab-pane>
                     <el-tab-pane name="label2" label="我的头像" class="user-tabpane">
                         <div class="crop-wrap" v-if="activeName === 'label2'">
                             <vueCropper
@@ -104,8 +101,6 @@
 import { reactive, ref } from 'vue';
 import { VueCropper } from 'vue-cropper';
 import 'vue-cropper/dist/index.css';
-// import avatar from '@/assets/img/img.jpg';
-import TabsComp from '../element/tabs.vue';
 import {useUserStore} from "@/store/user";
 import {Female, Male} from "@element-plus/icons-vue";
 import {HelpOutline} from '@vicons/ionicons5'
@@ -113,9 +108,7 @@ const userStore = useUserStore()
 const user = userStore.getUser()
 
 
-// const username: string | null = localStorage.getItem('vuems_name');
-// const username: string | null = userStore.getUser().userName
-const name: string | '../assets/img/img.jpg' = user.userName
+const name: string | '../assets/img/img.jpg' = user.username
 const avatar : string | '@/assets/img/img.jpg' = user.avatarUrl
 const form = reactive({
     new1: '',
@@ -124,7 +117,7 @@ const form = reactive({
 });
 const onSubmit = () => {};
 
-const activeName = ref('label1');
+const activeName = ref('label2');
 
 const avatarImg = ref(avatar);
 const imgSrc = ref(avatar);
@@ -280,7 +273,4 @@ const saveAvatar = () => {
     height: 100%;
 }
 
-.card-header{
-
-}
 </style>
