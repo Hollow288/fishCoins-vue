@@ -5,9 +5,9 @@ import {reactive, ref, watch} from "vue";
 import {ElMessage, FormInstance, FormRules, UploadProps} from "element-plus";
 import {UploadAPI} from "@/api/upload";
 import {
-  EventConsultationInfo
-} from "@/types/hotta/event-consultation/basic-info";
-import {EventConsultationAPI} from "@/api/hotta/event-consultation";
+  EventNewsInfo
+} from "@/types/hotta/event-news/basic-info";
+import {EventNewsAPI} from "@/api/hotta/event-news";
 
 
 const formRef = ref<FormInstance | null>(null);
@@ -26,18 +26,19 @@ const props = defineProps({
 });
 
 
-const formData = ref<EventConsultationInfo>({
-  consultationId: '',
-  consultationTitle: '',
-  consultationDescribe: '',
-  consultationThumbnailUrl: '',
-  consultationStart: '',
-  consultationEnd: ''
+const formData = ref<EventNewsInfo>({
+  newsId: '',
+  newsTitle: '',
+  newsDescribe: '',
+  newsImgUrl: '',
+  newsShowImgUrl: '',
+  newsStart: '',
+  newsEnd: ''
 })
 
 
-const rules = reactive<FormRules<EventConsultationInfo>>({
-  consultationTitle: [
+const rules = reactive<FormRules<EventNewsInfo>>({
+  newsTitle: [
     {required: true, message: '请输入活动标题', trigger: 'blur'},
   ]
 })
@@ -56,14 +57,14 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
     ElMessage.error('Avatar picture must be JPG format!')
     return false
   } else if (rawFile.size / 1024 / 1024 > 5) {
-    ElMessage.error('Avatar picture size can not exceed 2MB!')
+    ElMessage.error('Avatar picture size can not exceed 5MB!')
     return false
   }
-  return true
+  return false
 }
 
 const handleChange = (file) => {
-  formData.value.consultationThumbnailUrl = URL.createObjectURL(file.raw!)
+  formData.value.newsShowImgUrl = URL.createObjectURL(file.raw!)
   fileIsEdit.value = true
   fileListRef.value.splice(0, fileListRef.value.length)
   fileListRef.value.push(file.raw)
@@ -73,14 +74,7 @@ const save = async () => {
   if (!formRef.value) return;
   await formRef.value.validate(async (valid, fields) => {
     if (valid) {
-      if(props.isEdit == 'add' || props.isEdit == 'edit'){
-        const {code, data, message} = await EventConsultationAPI.addOrEditEventConsultationInfo(formData.value)
-        if (code === 200) {
-          formData.value.consultationId = data.consultationId
-        } else {
-          ElMessage.error("保存失败了 "+message)
-          return
-        }
+      if (props.isEdit == 'add' || props.isEdit == 'edit') {
 
         if (fileListRef.value.length > 0 && fileIsEdit.value) {
           const fileData = new FormData()
@@ -88,17 +82,29 @@ const save = async () => {
             fileData.append('file', file)
           })
 
-          const {code, message} = await UploadAPI.uploadEventConsultationImgFile(fileData, formData.value.consultationId)
+          const {code, data, msg} = await UploadAPI.uploadFile(fileData, "hotta-event-news")
           if (code === 200) {
-            ElMessage.success('保存成功')
-            emit('save');
+            formData.value.newsImgUrl = data
           } else {
-            ElMessage.error(message)
+            ElMessage.error(msg)
             return
           }
-        }else{
-          ElMessage.success('保存成功')
+        }
+
+        let code: number, msg: string;
+
+        if (props.isEdit === 'add') {
+          ({code, msg} = await EventNewsAPI.addEventNewsInfo(formData.value));
+        } else if (props.isEdit === 'edit') {
+          ({code, msg} = await EventNewsAPI.editEventNewsInfo(formData.value, formData.value.newsId));
+        }
+
+        if (code === 200) {
+          ElMessage.success("保存成功");
           emit('save');
+        } else {
+          ElMessage.error(msg);
+          return;
         }
       }
 
@@ -113,7 +119,7 @@ watch(
     () => props,
     async (newValue) => {
       if (newValue.formDataId && newValue.isEdit != 'add') {
-        const request = await EventConsultationAPI.selectIdEventConsultationInfo(newValue.formDataId);
+        const request = await EventNewsAPI.selectIdEventNewsInfo(newValue.formDataId);
         formData.value = request.data
       }
     },
@@ -142,7 +148,7 @@ defineExpose({
               :before-upload="beforeAvatarUpload"
               :on-change="handleChange"
           >
-            <el-image v-if="formData.consultationThumbnailUrl" :src="formData.consultationThumbnailUrl" class="avatar"/>
+            <el-image v-if="formData.newsShowImgUrl" :src="formData.newsShowImgUrl" class="avatar"/>
             <el-icon v-else class="avatar-uploader-icon">
               <Plus/>
             </el-icon>
@@ -152,25 +158,25 @@ defineExpose({
       <el-col :span="16">
         <el-row>
           <el-col :span="24">
-            <el-form-item label="活动标题" :label-width="formLabelWidth" prop="consultationTitle">
-              <el-input v-model="formData.consultationTitle" placeholder="活动标题"/>
+            <el-form-item label="活动标题" :label-width="formLabelWidth" prop="newsTitle">
+              <el-input v-model="formData.newsTitle" placeholder="活动标题"/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="开始时间" :label-width="formLabelWidth" prop="consultationStart">
+            <el-form-item label="开始时间" :label-width="formLabelWidth" prop="newsStart">
               <el-date-picker
-                  v-model="formData.consultationStart"
+                  v-model="formData.newsStart"
                   type="datetime"
                   placeholder="开始时间"
               />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="结束时间" :label-width="formLabelWidth" prop="consultationEnd">
+            <el-form-item label="结束时间" :label-width="formLabelWidth" prop="newsEnd">
               <el-date-picker
-                  v-model="formData.consultationEnd"
+                  v-model="formData.newsEnd"
                   type="datetime"
                   placeholder="开始时间"
               />
@@ -182,8 +188,8 @@ defineExpose({
     </el-row>
     <el-row>
       <el-col :span="24">
-        <el-form-item label="活动描述" :label-width="formLabelWidth" prop="consultationDescribe">
-          <el-input type="textarea" v-model="formData.consultationDescribe" placeholder="活动描述" :rows="3"/>
+        <el-form-item label="活动描述" :label-width="formLabelWidth" prop="newsDescribe">
+          <el-input type="textarea" v-model="formData.newsDescribe" placeholder="活动描述" :rows="3"/>
         </el-form-item>
       </el-col>
     </el-row>

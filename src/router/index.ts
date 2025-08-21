@@ -71,14 +71,14 @@ const routes: RouteRecordRaw[] = [
                 component: () => import('@/views/hotta/IllustratedMimicry/index.vue'),
             },
             {
-                path: '/EventConsultation',
-                name: 'EventConsultation',
+                path: '/EventNews',
+                name: 'EventNews',
                 meta: {
                     title: '活动资讯',
                     permiss: '30',
                     icon: 'Bell'
                 },
-                component: () => import('@/views/hotta/EventConsultation/index.vue'),
+                component: () => import('@/views/hotta/EventNews/index.vue'),
             },
             {
                 path: '/Food',

@@ -37,7 +37,7 @@ export const menuData: Menus[] = [
             {
                 id: '86',
                 pid: '8',
-                index: '/EventConsultation',
+                index: '/EventNews',
                 title: '活动资讯',
                 icon: 'Bell'
             },

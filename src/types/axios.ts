@@ -1,7 +1,7 @@
 // 响应类型
 export interface Response {
   code?: number
-  message?: string
+  msg?: string
 }
 
 // 响应类型（数据）

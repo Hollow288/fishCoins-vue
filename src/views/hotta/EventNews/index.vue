@@ -1,27 +1,27 @@
 <script setup lang="ts">
 
 import {Delete, Edit, Plus, RefreshRight} from "@element-plus/icons-vue";
-import {EventConsultationFormModal} from './components'
+import {EventNewsFormModal} from './components'
 import {onMounted, reactive, ref, watch} from "vue";
 
-import {EventConsultationInfo, EventConsultationPage} from "@/types/hotta/event-consultation/basic-info";
-import {EventConsultationAPI} from "@/api/hotta/event-consultation";
+import {EventNewsInfo, EventNewsPage} from "@/types/hotta/event-news/basic-info";
+import {EventNewsAPI} from "@/api/hotta/event-news";
 import {Action, ElMessage, ElMessageBox} from "element-plus";
 import {Search } from '@element-plus/icons-vue'
 const dialogFormVisible = ref(false)
-const eventConsultationQueryParams = ref<EventConsultationPage>({page:1,page_size:10,search_name:''})
-let tableData = reactive<EventConsultationInfo[]>([])
+const eventNewsQueryParams = ref<EventNewsPage>({page:1,page_size:10,search_name:''})
+let tableData = reactive<EventNewsInfo[]>([])
 const formTotal = ref<number>(0)
 const loading = ref(false)
 const dialogName =ref('')
-const eventConsultationFormModalRef = ref()
+const eventNewsFormModalRef = ref()
 const rowDataId = ref(null)
 const isEdit = ref('')
 const formRef = ref()
 
 const queryList = ()=>{
   loading.value = true
-  EventConsultationAPI.selectPageEventConsultationInfo(eventConsultationQueryParams.value).then(request=>{
+  EventNewsAPI.selectPageEventNewsInfo(eventNewsQueryParams.value).then(request=>{
     tableData.splice(0, tableData.length, ...request.data.data);
     formTotal.value = request.data.total || 0
     loading.value = false
@@ -30,8 +30,8 @@ const queryList = ()=>{
 }
 
 const add = () => {
-  eventConsultationFormModalRef.value
-  dialogName.value = "EventConsultation Info - ADD"
+  eventNewsFormModalRef.value
+  dialogName.value = "EventNews Info - ADD"
   isEdit.value = 'add'
   rowDataId.value = null
   dialogFormVisible.value = true
@@ -43,8 +43,8 @@ const edit = () => {
     ElMessage.warning('仅能选择一条数据修改！');
     return
   }
-  rowDataId.value = editList[0].consultationId
-  dialogName.value = "EventConsultation Info - EDIT"
+  rowDataId.value = editList[0].newsId
+  dialogName.value = "EventNews Info - EDIT"
   isEdit.value = 'edit'
   dialogFormVisible.value = true
 }
@@ -69,13 +69,13 @@ const deletes = () => {
   )
       .then(() => {
         let temList = []
-        editList.map((n: EventConsultationInfo)=>temList.push(n.consultationId))
-        EventConsultationAPI.deleteEventConsultationInfo({eventConsultationIds:temList}).then(request=>{
+        editList.map((n: EventNewsInfo)=>temList.push(n.newsId))
+        EventNewsAPI.deleteEventNewsInfo({eventNewsIds:temList}).then(request=>{
           if(request.code === 200){
-            ElMessage.success(request.message)
+            ElMessage.success(request.msg)
             queryList()
           }else{
-            ElMessage.error(request.message)
+            ElMessage.error(request.msg)
           }
         })
 
@@ -90,21 +90,21 @@ const deletes = () => {
 
 }
 
-const view = (row: EventConsultationInfo) =>{
-  rowDataId.value = row.consultationId
-  dialogName.value = "EventConsultation Info - VIEW"
+const view = (row: EventNewsInfo) =>{
+  rowDataId.value = row.newsId
+  dialogName.value = "EventNews Info - VIEW"
   isEdit.value = 'view'
   dialogFormVisible.value = true
 }
 
 
 const saveFormData=()=>{
-  eventConsultationFormModalRef.value.save()
+  eventNewsFormModalRef.value.save()
 }
 
 
 watch(
-    () => eventConsultationQueryParams.value.page,
+    () => eventNewsQueryParams.value.page,
     async () => {
       queryList()
     },
@@ -122,7 +122,7 @@ watch(
     </el-button>
 
     <el-input
-        v-model="eventConsultationQueryParams.search_name"
+        v-model="eventNewsQueryParams.search_name"
         style="width: 200px;margin-left: 10px; margin-right: auto;"
         placeholder="搜索名称"
     >
@@ -147,11 +147,11 @@ watch(
 
   <el-table ref="formRef" :data="tableData" style="width: 100%; height: 100%;" size="large" v-loading="loading" @row-dblclick="view">
     <el-table-column type="selection"  width="55"/>
-    <el-table-column fixed prop="consultationTitle" label="活动标题" width="150"/>
-    <el-table-column prop="consultationId" label="活动ID" width="120"/>
-    <el-table-column prop="consultationThumbnailUrl" label="活动封面" width="120">
+    <el-table-column fixed prop="newsTitle" label="活动标题" width="150"/>
+    <el-table-column prop="newsId" label="活动ID" width="120"/>
+    <el-table-column prop="newsShowImgUrl" label="活动封面" width="120">
       <template #default="scope">
-        <el-image  preview-teleported :src="scope.row.consultationThumbnailUrl">
+        <el-image  preview-teleported :src="scope.row.newsShowImgUrl">
           <template #error>
             <div class="image-slot">
               <el-image preview-teleported src="src/assets/img/zwtp.jpg"/>
@@ -160,7 +160,7 @@ watch(
         </el-image>
       </template>
     </el-table-column>
-    <el-table-column prop="consultationDescription" label="活动描述" min-width="300"/>
+    <el-table-column prop="newsDescription" label="活动描述" min-width="300"/>
   </el-table>
 
   <div style="display: flex; justify-content: flex-end; padding: 20px 0 0;">
@@ -169,12 +169,12 @@ watch(
         background
         layout="prev, pager, next"
         :total="formTotal"
-        v-model:current-page="eventConsultationQueryParams.page"
+        v-model:current-page="eventNewsQueryParams.page"
     />
   </div>
 
   <el-dialog v-model="dialogFormVisible" :title="dialogName" width="1200"  draggable  align-center destroy-on-close :close-on-click-modal="false">
-    <EventConsultationFormModal :form-data-id="rowDataId" :is-edit="isEdit" ref="eventConsultationFormModalRef" @save="queryList"/>
+    <EventNewsFormModal :form-data-id="rowDataId" :is-edit="isEdit" ref="eventNewsFormModalRef" @save="queryList"/>
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
