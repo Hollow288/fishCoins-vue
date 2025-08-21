@@ -99,7 +99,6 @@
 
 <script setup lang="ts" name="ucenter">
 import { reactive, ref } from 'vue';
-import { VueCropper } from 'vue-cropper';
 import 'vue-cropper/dist/index.css';
 import {useUserStore} from "@/store/user";
 import {Female, Male} from "@element-plus/icons-vue";
