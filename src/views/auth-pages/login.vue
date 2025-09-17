@@ -2,8 +2,8 @@
     <div class="login-bg">
         <div class="login-container">
             <div class="login-header">
-                <img class="logo mr10" src="../../assets/img/logo.svg" alt="" />
-                <div class="login-title">Fish Coins</div>
+                <img class="logo mr10" src="../../assets/img/icons8.png" alt="" />
+                <div class="login-title">&nbsp&nbsp后 台 管 理</div>
             </div>
             <el-form :model="param" :rules="rules" ref="login" size="large">
                 <el-tabs v-model="param.type" class="demo-tabs" @tab-click="handleClick" :stretch="true">
@@ -75,21 +75,21 @@
                 </el-tabs>
 
                 <el-button class="login-btn" type="primary" size="large" @click="submitForm(login)">登录</el-button>
-                <p class="login-text">
-                    没有账号？<el-link type="primary" @click="$router.push('/register')">立即注册</el-link>
-                    <span class="icon-container">
-<!--                        <el-tooltip content="Bottom center" placement="bottom" effect="light" hide-after="0">-->
-<!--                            <el-icon :size="25" class="clickable-icon">-->
-<!--                                <PhonePortraitOutline />-->
+<!--                <p class="login-text">-->
+<!--                    没有账号？<el-link type="primary" @click="$router.push('/register')">立即注册</el-link>-->
+<!--                    <span class="icon-container">-->
+<!--&lt;!&ndash;                        <el-tooltip content="Bottom center" placement="bottom" effect="light" hide-after="0">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <el-icon :size="25" class="clickable-icon">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <PhonePortraitOutline />&ndash;&gt;-->
+<!--&lt;!&ndash;                            </el-icon>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </el-tooltip>&ndash;&gt;-->
+<!--                        <el-tooltip content="Github" placement="bottom" effect="light" hide-after="0">-->
+<!--                            <el-icon :size="25" class="clickable-icon" @click="oauth2Login">-->
+<!--                                <LogoGithub />-->
 <!--                            </el-icon>-->
 <!--                        </el-tooltip>-->
-                        <el-tooltip content="Github" placement="bottom" effect="light" hide-after="0">
-                            <el-icon :size="25" class="clickable-icon" @click="oauth2Login">
-                                <LogoGithub />
-                            </el-icon>
-                        </el-tooltip>
-                    </span>
-                </p>
+<!--                    </span>-->
+<!--                </p>-->
 
             </el-form>
         </div>
@@ -122,7 +122,7 @@ interface LoginInfo {
 const route = useRoute()
 const lgStr = localStorage.getItem('login-param');
 const defParam = lgStr ? JSON.parse(lgStr) : null;
-const checked = ref(lgStr ? true : false);
+const checked = ref(!!lgStr);
 const redirectUrl = computed(() => route.query.redirect as string)
 
 const router = useRouter();
@@ -205,10 +205,10 @@ const submitForm = (formEl: FormInstance | undefined) => {
 
             // localStorage.setItem('vuems_name', param.username);
             AuthAPI.login(param).then(res=>{
-                const { code, data, message } = res
+                const { code, data, msg } = res
                 const { accessToken, refreshToken, user } = data ?? {}
                 if(code == 200){
-                    ElMessage.success(message);
+                    ElMessage.success(msg);
                     AuthUtils.setAccessToken(accessToken)
                     AuthUtils.setRefreshToken(refreshToken)
                     userStore.setUser(user)
@@ -226,7 +226,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
                     }
 
                 }else{
-                    ElMessage.error(message);
+                    ElMessage.error(msg);
                 }
             })
 
