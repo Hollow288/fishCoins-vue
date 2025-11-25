@@ -9,6 +9,7 @@ declare global {
   const ArmsAPI: typeof import('./src/api/hotta/arms')['ArmsAPI']
   const AuthAPI: typeof import('./src/api/auth')['AuthAPI']
   const AuthUtils: typeof import('./src/utils/auth')['AuthUtils']
+  const BlogAPI: typeof import('./src/api/other/blog')['BlogAPI']
   const EventNewsAPI: typeof import('./src/api/hotta/event-news')['EventNewsAPI']
   const FoodAPI: typeof import('./src/api/hotta/food')['FoodAPI']
   const MimicryAPI: typeof import('./src/api/hotta/mimicry')['MimicryAPI']
@@ -49,6 +50,9 @@ declare global {
   // @ts-ignore
   export type { UploadAPI, UploadAPI } from './src/api/upload'
   import('./src/api/upload')
+  // @ts-ignore
+  export type { BlogAPI } from './src/api/other/blog'
+  import('./src/api/other/blog')
   // @ts-ignore
   export type { AuthUtils } from './src/utils/auth'
   import('./src/utils/auth')

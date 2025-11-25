@@ -8,6 +8,21 @@ export const menuData: Menus[] = [
         icon: 'Compass',
     },
     {
+        id: '1',
+        title: '其他',
+        index: '1',
+        icon: 'More',
+        children: [
+            {
+                id: '10',
+                pid: '1',
+                index: '/Blog',
+                title: '博客文章',
+                icon: 'Tickets'
+            }
+        ]
+    },
+    {
         id: '8',
         title: 'Hotta',
         index: '8',

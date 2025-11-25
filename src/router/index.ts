@@ -89,6 +89,16 @@ const routes: RouteRecordRaw[] = [
                     icon: 'Food'
                 },
                 component: () => import('@/views/hotta/Food/index.vue'),
+            },
+            {
+                path: '/Blog',
+                name: 'Blog',
+                meta: {
+                    title: '博客',
+                    permiss: '30',
+                    icon: 'Tickets'
+                },
+                component: () => import('@/views/other/Blog/index.vue'),
             }
         ],
     },
